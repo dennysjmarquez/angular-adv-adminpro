@@ -1,0 +1,72 @@
+<div class="row">
+
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+
+                <app-charts-doughnut
+
+                        title="Ubuntu logo"
+                        [colors]="[{backgroundColor: ['#FF5800', '#9E120E', '#FFB414']}]"
+                        [labels]="['Unidad', 'Solidaridad', 'Compasión']"
+                        [options]="{rotation: 4.2, responsive: true}"
+                        [data]="[[150, 150, 150]]"
+
+                ></app-charts-doughnut>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+
+                <app-charts-doughnut
+
+                        [labels]="['Label 1', 'Label 2', 'Label 3']"
+                        [data]="[[10, 15, 40]]"
+
+                ></app-charts-doughnut>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="row">
+
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+
+                <app-charts-doughnut
+
+                        title="Grafico 3"
+                        [labels]="['Label 1', 'Label 2', 'Label 3']"
+                        [data]="[[350, 450, 100]]"
+
+                ></app-charts-doughnut>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+
+                <app-charts-doughnut
+
+                        title="Grafico 4"
+                        [labels]="['Label 1', 'Label 2']"
+                        [data]="[[150, 150, 150]]"
+
+                ></app-charts-doughnut>
+
+            </div>
+        </div>
+    </div>
+
+</div>

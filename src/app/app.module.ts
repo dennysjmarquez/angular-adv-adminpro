@@ -11,7 +11,6 @@ import { AppComponent } from './app.component';
 import { ErrorPage404Component } from './statusCodesPages/404/errorpage404.component';
 
 
-
 @NgModule({
   imports: [
     BrowserModule,
@@ -21,7 +20,7 @@ import { ErrorPage404Component } from './statusCodesPages/404/errorpage404.compo
   ],
   declarations: [
     AppComponent,
-    ErrorPage404Component
+    ErrorPage404Component,
   ],
   providers: [],
   bootstrap: [AppComponent]

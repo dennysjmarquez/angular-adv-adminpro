@@ -1,0 +1,14 @@
+<div class="input-group input-form">
+    <span class="input-group-btn">
+        <button (click)="changeValue(-10)" [ngClass]="variant" class="btn" type="button">
+            <i class="fa fa-minus"></i>
+        </button>
+    </span>
+    <div class="form-control justify-content-center">{{progressLevel}}</div>
+    <!--<input class="form-control" placeholder="Product name" type="text" [value]="progressLevel">-->
+    <span class="input-group-btn">
+        <button (click)="changeValue(10)" [ngClass]="variant" class="btn" type="button">
+            <i class="fa fa-plus"></i>
+        </button>
+    </span>
+</div>

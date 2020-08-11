@@ -1,0 +1,37 @@
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Striped Progress bar</h4>
+                <div class="progress m-t-20">
+                    <div [style.width]="progress1"
+                         class="progress-bar bg-primary progress-bar-striped active" role="progressbar" style="height:10px;">
+                    </div>
+                </div>
+
+                <div class="progress m-t-20">
+                    <div [style.width]="progress2"
+                         class="progress-bar bg-info progress-bar-striped active" role="progressbar" style="height:10px;">
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <app-increase (change)="changeValue($event, 'progress1')" [valueInit]="progress1" variant="btn-primary"></app-increase>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <app-increase (change)="changeValue($event, 'progress2')" [valueInit]="progress2" variant="btn-info"></app-increase>
+            </div>
+        </div>
+    </div>
+</div>

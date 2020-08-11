@@ -1,0 +1,13 @@
+<h4 *ngIf="title" class="card-title">{{title}}</h4>
+
+<div style="display: block">
+    <canvas
+            baseChart
+            [colors]="colors"
+            [data]="data"
+            [labels]="labels"
+            chartType="doughnut"
+            [options]="options">
+    </canvas>
+</div>
+
