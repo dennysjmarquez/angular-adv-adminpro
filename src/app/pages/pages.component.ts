@@ -1,5 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 
+// Services
+import {SettingService} from '../services/setting.service';
+
+declare function customScriptINI();
+
 @Component({
   selector: 'app-pages',
   templateUrl: './pages.component.html',
@@ -8,9 +13,10 @@ import { Component, OnInit } from '@angular/core';
 })
 export class PagesComponent implements OnInit {
 
-  constructor() { }
+  constructor(private _settingService: SettingService) { }
 
   ngOnInit(): void {
+    customScriptINI();
   }
 
 }

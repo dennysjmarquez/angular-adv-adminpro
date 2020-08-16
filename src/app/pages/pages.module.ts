@@ -6,11 +6,12 @@ import { CommonModule } from '@angular/common';
 import {SharedModule} from '../shared/shared.module';
 import {ComponentsModule} from '../components/components.module';
 
-// Components
+// Components Pages
 import {DashboardPageComponent} from './dashboard/dashboard-page.component';
 import {Grafica1PageComponent} from './grafica1/grafica1-page.component';
 import {ProgressPageComponent} from './progress/progress-page.component';
 import {PagesComponent} from './pages.component';
+import {AcountSettingPageComponent} from './acount-setting/acount-setting-page.component';
 
 
 @NgModule({
@@ -18,7 +19,8 @@ import {PagesComponent} from './pages.component';
     DashboardPageComponent,
     Grafica1PageComponent,
     ProgressPageComponent,
-    PagesComponent
+    PagesComponent,
+    AcountSettingPageComponent
   ],
   imports: [
 
@@ -36,7 +38,8 @@ import {PagesComponent} from './pages.component';
     DashboardPageComponent,
     Grafica1PageComponent,
     ProgressPageComponent,
-    PagesComponent
+    PagesComponent,
+    AcountSettingPageComponent
   ]
 })
 export class PagesModule { }

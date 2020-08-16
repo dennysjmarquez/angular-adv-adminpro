@@ -20,7 +20,7 @@ import { ErrorPage404Component } from './statusCodesPages/404/errorpage404.compo
   ],
   declarations: [
     AppComponent,
-    ErrorPage404Component,
+    ErrorPage404Component
   ],
   providers: [],
   bootstrap: [AppComponent]

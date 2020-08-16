@@ -15,7 +15,7 @@ const APP_ROUTES: Routes = [
 
 ];
 
-const APP_ROUTING = RouterModule.forRoot( APP_ROUTES);
+const APP_ROUTING = RouterModule.forRoot( APP_ROUTES, { useHash: true} );
 
 @NgModule({
   declarations: [],
