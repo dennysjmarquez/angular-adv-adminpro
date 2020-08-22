@@ -23,7 +23,7 @@ const APP_ROUTING = RouterModule.forRoot(APP_ROUTES);
     RouterModule
   ]
 })
-export class AuthRouterModule { }
+export class AuthRouter { }
 
 
 

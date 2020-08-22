@@ -12,6 +12,8 @@ import {Grafica1PageComponent} from './grafica1/grafica1-page.component';
 import {ProgressPageComponent} from './progress/progress-page.component';
 import {PagesComponent} from './pages.component';
 import {AcountSettingPageComponent} from './acount-setting/acount-setting-page.component';
+import { PromisePageComponent } from './promise/promise-page.component';
+import { RxjsPageComponent } from './rxjs/rxjs-page.component';
 
 
 @NgModule({
@@ -20,7 +22,9 @@ import {AcountSettingPageComponent} from './acount-setting/acount-setting-page.c
     Grafica1PageComponent,
     ProgressPageComponent,
     PagesComponent,
-    AcountSettingPageComponent
+    AcountSettingPageComponent,
+    PromisePageComponent,
+    RxjsPageComponent
   ],
   imports: [
 

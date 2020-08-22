@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
+declare function customScriptINI();
+
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
@@ -15,6 +17,9 @@ export class RegisterComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
+    customScriptINI();
+
   }
 
 }

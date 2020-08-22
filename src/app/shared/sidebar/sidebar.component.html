@@ -22,6 +22,7 @@
 
                 <li class="nav-devider"></li>
 
+                <!--Menu sidebar -->
                 <ng-container>
 
                     <!-- Menú anidado de Múltiples niveles -->
@@ -62,7 +63,7 @@
 
                             <ng-container *ngFor="let item of items">
 
-                                <li *ngIf="!item['subMenu'];"><a [routerLink]="item['path']">{{item['title']}}</a></li>
+                                <li *ngIf="!item['subMenu'];"><a [routerLink]="item['path']" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">{{item['title']}}</a></li>
 
                                 <ng-container
                                         *ngTemplateOutlet="item['subMenu'] ? menu : null; context: {data: [item]}"></ng-container>

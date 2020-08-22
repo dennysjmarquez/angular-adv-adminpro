@@ -10,8 +10,6 @@ export class SettingService {
 
   constructor() {
 
-    console.log('[constructor]', 'SettingService')
-
     this.changeTheme(this.getNameTheme());
 
   }

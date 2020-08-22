@@ -5,8 +5,8 @@ import { Routes, RouterModule } from '@angular/router';
 import {ErrorPage404Component} from '../statusCodesPages/404/errorpage404.component';
 
 // Routers
-import {PagesRouterModule} from '../pages/pages-router.module';
-import {AuthRouterModule} from '../auth/auth-router.module';
+import {PagesRouter} from '../pages/pages-router';
+import {AuthRouter} from '../auth/auth-router';
 
 const APP_ROUTES: Routes = [
 
@@ -21,8 +21,8 @@ const APP_ROUTING = RouterModule.forRoot( APP_ROUTES, { useHash: true} );
   declarations: [],
   imports: [
     APP_ROUTING,
-    PagesRouterModule,
-    AuthRouterModule
+    PagesRouter,
+    AuthRouter
   ],
   exports: [RouterModule]
 })
