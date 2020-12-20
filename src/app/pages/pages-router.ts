@@ -9,9 +9,13 @@ import {AcountSettingPageComponent} from './acount-setting/acount-setting-page.c
 import {PromisePageComponent} from './promise/promise-page.component';
 import {RxjsPageComponent} from './rxjs/rxjs-page.component';
 
+// Guards
+import { AuthGuard } from '../guards/auth.guard';
+
+
 const APP_ROUTES: Routes = [
   // Template principal
-  {path: 'dashboard', component: PagesComponent,
+  {path: 'dashboard', component: PagesComponent, canActivate: [AuthGuard],
     children: [
       { path: '', component: DashboardPageComponent, data: { title: 'Dashboard' } },
       { path: 'progress', component: ProgressPageComponent, data: { title: 'Progress Bar' } },
