@@ -1,0 +1,89 @@
+<div class="row">
+
+   <div class="col-md-6">
+
+      <div class="card">
+
+         <div class="card-body">
+
+            <div class="col-auto">
+
+               <form class="form p-t-20" [formGroup]="profileForm" (ngSubmit)="onSubmit()">
+                  <div class="form-group">
+                     <label for="exampleInputuname">User Name</label>
+                     <div class="input-group">
+                        <div class="input-group-addon"><i class="ti-user"></i></div>
+                        <input type="text" class="form-control" id="exampleInputuname" placeholder="Enter name"
+                               formControlName="name">
+                     </div>
+                  </div>
+                  <div class="form-group">
+                     <label for="exampleInputEmail1">Email address</label>
+                     <div class="input-group">
+                        <div class="input-group-addon"><i class="ti-email"></i></div>
+                        <input type="email" class="form-control" id="exampleInputEmail1"
+                               placeholder="Enter email"
+                               formControlName="email"
+                               [readonly]="user.google"
+                        >
+                     </div>
+                  </div>
+
+                  <button type="submit" class="btn btn-success waves-effect waves-light m-r-10"><i
+                     class="fa fa-save mr-2"></i>Guardar cambios
+                  </button>
+
+               </form>
+
+            </div>
+
+         </div>
+
+      </div>
+
+   </div>
+
+   <div class="col-md-6">
+
+      <div class="card">
+
+         <div class="card-body">
+
+            <h4 class="card-title">Avatar</h4>
+            <h6 class="card-subtitle">Imagen del usuario </h6>
+
+            <div class="form-group">
+
+               <img [src]="previImagenUser" class="img-fluid d-block mb-3">
+               <input type="file" #avatarFile (change)="handleFileInput($event.target.files[0])" hidden>
+
+
+            </div>
+
+
+            <button
+               type="button"
+               class="btn btn-success waves-effect waves-light m-r-10"
+
+               (click)="clickFile()"><i
+               class="fa fa-save mr-2"></i>Cambiar imagen
+            </button>
+
+
+         </div>
+      </div>
+
+   </div>
+
+   <div class="col-md-12">
+
+
+      <div class="col text-danger">
+         <p *ngIf="fieldNotValid('email', 'required')">* El email es obligatorio</p>
+         <p *ngIf="fieldNotValid('email', 'email')">* Debe de ser un email valido</p>
+         <p *ngIf="fieldNotValid('name', 'required')">* El nombre de usuario obligatorio</p>
+      </div>
+
+   </div>
+
+</div>

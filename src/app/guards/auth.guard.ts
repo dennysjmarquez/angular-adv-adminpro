@@ -30,7 +30,8 @@ export class AuthGuard implements CanActivate {
 
                 // el " of " permite crar un observable
                 // en base a un argumento en este caso false,
-                // esto para no romper el siclo lo tipo esperado
+                // esto para no romper el siclo del tipo esperado que es
+                // un observable
                 return of(false);
 
             })

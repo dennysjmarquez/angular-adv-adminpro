@@ -1,8 +1,9 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, NgZone, OnInit, AfterViewInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
-import Swal from 'sweetalert2'
-import {UserService} from '../../services/user.service';
+import Swal from 'sweetalert2';
+import {UserService} from '../../../services/user.service';
+import {GoogleLoginService} from '../../../services/google-login.service';
 
 declare function customScriptINI();
 
@@ -10,31 +11,33 @@ declare function customScriptINI();
     selector: 'app-register',
     templateUrl: './register.component.html',
     styles: [
-            `
+        `
             @import "./assets/css/pages/login-register-lock.css";
 
         `]
 })
-export class RegisterComponent implements OnInit {
+export class RegisterComponent implements OnInit, AfterViewInit {
 
     public formSubmitted = false;
 
     public registerFrom = this.fb.group({
-        name: ['Dennys', [Validators.required, Validators.minLength(3)]],
-        email: ['dennysjmarquez@gmail.com', [Validators.required, Validators.email]],
-        password: ['123456', Validators.required],
-        password2: ['123456', Validators.required],
+        name: ['', [Validators.required, Validators.minLength(3)]],
+        email: ['', [Validators.required, Validators.email]],
+        password: ['', Validators.required],
+        password2: ['', Validators.required],
         terms: [false, Validators.required]
-    },{
+    }, {
         validators: [
-            this.equalFields('password','password2', 'passWordNotequal')
+            this.equalFields('password', 'password2', 'passWordNotequal')
         ]
     });
 
     constructor(
         private fb: FormBuilder,
         private userService: UserService,
-        private _router: Router
+        private _router: Router,
+        private ngZone: NgZone,
+        private googleLoginService: GoogleLoginService
     ) {
     }
 
@@ -44,30 +47,48 @@ export class RegisterComponent implements OnInit {
 
     }
 
-    fieldNotValid(field: string, error: string): Boolean{
+    ngAfterViewInit(): void {
+
+        this.googleLoginService.makertGoogleLoginBtn({
+
+            btnSignin: 'goole-signin',
+
+            callbackStartApp: (profile) => {
+
+                // Redirige
+                this.ngZone.run(() => this.redirect());
+
+            }
+        });
+
+    }
+
+    fieldNotValid(field: string, error: string): Boolean {
 
         return this.formSubmitted && (
             error === 'checkbox'
                 ? !this.registerFrom.get(field).value
                 : this.registerFrom.get(field).getError(error)
-        )
+        );
 
     }
 
-    fromNotValid(error: string){
+    fromNotValid(error: string) {
 
-      return this.registerFrom.getError(error)
+        return this.registerFrom.getError(error);
 
     }
 
-    equalFields(FieldName1: string, FieldName2: string, name: string){
+    equalFields(FieldName1: string, FieldName2: string, name: string) {
 
         return (formGroup: FormGroup) => {
 
             const FieldName1Value = formGroup.get(FieldName1).value;
             const FieldName2Value = formGroup.get(FieldName2).value;
 
-            if(!this.formSubmitted || FieldName1Value === FieldName2Value) return null;
+            if (!this.formSubmitted || FieldName1Value === FieldName2Value) {
+                return null;
+            }
 
             const error = {};
 
@@ -76,7 +97,13 @@ export class RegisterComponent implements OnInit {
             return error;
 
 
-        }
+        };
+
+    }
+
+    redirect() {
+
+        this._router.navigateByUrl('/');
 
     }
 
@@ -86,12 +113,14 @@ export class RegisterComponent implements OnInit {
 
         console.log(this.registerFrom);
 
-        if(this.registerFrom.invalid) return;
+        if (this.registerFrom.invalid) {
+            return;
+        }
 
         console.log('onSubmit');
 
         this.userService.createUser(this.registerFrom.value)
-            .subscribe( resp =>{
+            .subscribe(resp => {
 
                 console.log('createUser');
 

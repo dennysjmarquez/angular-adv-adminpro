@@ -6,7 +6,7 @@ import {ErrorPage404Component} from '../statusCodesPages/404/errorpage404.compon
 
 // Routers
 import {PagesRouter} from '../pages/pages-router';
-import {AuthRouter} from '../auth/auth-router';
+import {AuthRouter} from '../pages/auth/auth-router';
 
 const APP_ROUTES: Routes = [
 

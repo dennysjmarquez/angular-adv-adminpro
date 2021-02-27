@@ -45,9 +45,9 @@ export class RxjsPageComponent implements OnDestroy{
 
 
     ).subscribe(
-      (valor)=>console.log('[returnInterval]valor', valor),
-      (error) =>console.warn('returnInterval Error', error),
-      ()=>console.log('returnInterval Terminado'));
+      (valor)=>console.log('[returnInterval] valor', valor),
+      (error) =>console.warn('[returnInterval] Error', error),
+      ()=>console.log('[returnInterval] Terminado'));
 
   }
 

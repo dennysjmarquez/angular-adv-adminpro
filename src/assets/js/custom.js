@@ -160,3 +160,4 @@ const customScriptINI = () => {
   });
 
 }
+customScriptINI();

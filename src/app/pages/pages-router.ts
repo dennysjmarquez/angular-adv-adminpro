@@ -8,6 +8,7 @@ import {Grafica1PageComponent} from './grafica1/grafica1-page.component';
 import {AcountSettingPageComponent} from './acount-setting/acount-setting-page.component';
 import {PromisePageComponent} from './promise/promise-page.component';
 import {RxjsPageComponent} from './rxjs/rxjs-page.component';
+import {ProfilePageComponent} from './profile/profile-page.component';
 
 // Guards
 import { AuthGuard } from '../guards/auth.guard';
@@ -23,6 +24,7 @@ const APP_ROUTES: Routes = [
       { path: 'promise', component: PromisePageComponent, data: { title: 'Promise' } },
       { path: 'rxjs', component: RxjsPageComponent, data: { title: 'RxJs' } },
       { path: 'acount-setting', component: AcountSettingPageComponent, data: { title: 'Acount Setting' } },
+      { path: 'profile', component: ProfilePageComponent, data: { title: 'Profile' } },
     ]
   }
 ];
