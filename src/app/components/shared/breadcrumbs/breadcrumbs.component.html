@@ -2,18 +2,27 @@
 <!-- Bread crumb and right sidebar toggle -->
 <!-- ============================================================== -->
 <div class="row page-titles">
-  <div class="col-md-5 align-self-center">
-    <h3 class="text-themecolor">{{Title}}</h3>
+  <div class="col-12">
+
+     <h3 class="text-themecolor">{{Title}}</h3>
+
+     <div class="d-flex mt-2">
+
+        <ol class="breadcrumb">
+           <li class="breadcrumb-item">
+              <a href="javascript:void(0)">Home</a>
+           </li>
+           <li class="breadcrumb-item">pages</li>
+           <li class="breadcrumb-item active">{{lowerTitle}}</li>
+        </ol>
+
+     </div>
+
   </div>
-  <div class="col-md-7 align-self-center">
-    <ol class="breadcrumb">
-      <li class="breadcrumb-item">
-        <a href="javascript:void(0)">Home</a>
-      </li>
-      <li class="breadcrumb-item">pages</li>
-      <li class="breadcrumb-item active">{{lowerTitle}}</li>
-    </ol>
-  </div>
+
+
+
+
 </div>
 <!-- ============================================================== -->
 <!-- End Bread crumb and right sidebar toggle -->

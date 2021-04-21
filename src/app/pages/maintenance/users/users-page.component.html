@@ -1,0 +1,174 @@
+<div class="row animated fadeIn fast">
+   <div class="col-12">
+      <div class="card m-0">
+         <div class="card-body">
+
+            <div class="input-group bootstrap-touchspin">
+
+               <input
+                  type="text"
+                  placeholder="Buscar usuario"
+                  class="form-control"
+                  #elemSearchUsers
+                  (input)="searchUsers(elemSearchUsers.value)"
+               >
+
+               <span
+                  class="input-group-btn animated fadeIn"
+                  data-toggle="tooltip" data-placement="bottom" data-original-title="Borrar búsqueda"
+                  *ngIf="searchValue" (click)="clearSearchValue()">
+                  <button class="btn btn-danger" type="button">
+                     <i class="fa fa-close"></i>
+                  </button>
+
+               </span>
+
+            </div>
+
+
+         </div>
+      </div>
+   </div>
+</div>
+
+<div class="row">
+
+   <div class="col-12">
+
+      <div class="dataTables_wrapper d-flex pt-2 pb-2 justify-content-between align-items-center">
+
+         <div class="dataTables_info" *ngIf="useRecords">
+            Mostrando <strong>{{offset + limit > useRecords ? useRecords : offset + limit}}</strong> de
+            <strong>{{useRecords}}</strong> registros
+         </div>
+
+         <app-pagination #paginationRef [total]="useRecords" [itemPerPage]="limit"
+                         (setOffset)="setOffset($event)"></app-pagination>
+
+      </div>
+
+   </div>
+
+</div>
+
+<div class="row animated fadeIn" *ngIf="loading">
+   <div class="col-12">
+
+      <div class="alert alert-info text-center">
+
+         <h3 class="m-0">Cargando</h3>
+
+         <i class="fa fa-spin fa-refresh fa-2x"></i>
+
+         <p class="mb-0 ">Por favor espere</p>
+
+      </div>
+
+   </div>
+</div>
+
+<div class="row animated fadeIn" *ngIf="!loading && useRecords">
+
+   <div class="col-12">
+
+      <div class="card">
+
+         <div class="card-body">
+
+
+            <div class="table-responsive">
+
+               <div class="dataTables_wrapper">
+
+                  <table class="table vm no-th-brd pro-of-month">
+                     <thead>
+                     <tr>
+                        <th>Avatar</th>
+                        <th>Nambre</th>
+                        <th>Email</th>
+                        <th>Role</th>
+                        <th>Auth</th>
+                        <th class="text-nowrap" *ngIf="userService.user.role !== ROLE_ADMIN">Acciones</th>
+                     </tr>
+                     </thead>
+                     <tbody>
+
+
+                     <tr *ngFor="let user of users;">
+
+                        <td class="w50 cursor-pointer" (click)="openImageModal(user)">
+                           <span class="round">
+                              <img [src]="user.img | getImage:'users'" class="img-fluid">
+                           </span>
+                        </td>
+
+                        <td>{{user.name}}</td>
+                        <td>{{user.email}}</td>
+                        <td class="w100">
+
+                           <ng-container
+                              *ngIf="
+                              user.uid !== userService.user.uid &&
+                              userService.user.role === ROLE_ADMIN"
+                           >
+
+                              <select class="custom-select cursor-pointer"
+                                      [(ngModel)]="user.role"
+                                      (change)="changeUserRole(user)"
+                              >
+                                 <option value="ADMIN_ROLE">Admin</option>
+                                 <option value="USER_ROLE">User</option>
+                              </select>
+
+                           </ng-container>
+
+                           <ng-container *ngIf="user.uid === userService.user.uid">
+                              {{user.role}}
+                           </ng-container>
+
+                        </td>
+                        <td class="w100">
+
+                           <span *ngIf="user.google" class="label label-danger">Google</span>
+                           <span *ngIf="!user.google" class="label label-info">Normal</span>
+
+                        </td>
+                        <td class="text-nowrap w100 text-center"
+                            *ngIf="
+                              user.uid !== userService.user.uid &&
+                              userService.user.role === ROLE_ADMIN"
+                        >
+                           <a class="cursor-pointer" (click)="deleteUser(user)" data-toggle="tooltip"
+                              data-original-title="Borrar"> <i
+                              class="fa fa-close text-danger"></i> </a>
+                        </td>
+                     </tr>
+
+                     </tbody>
+                  </table>
+
+               </div>
+
+            </div>
+
+         </div>
+
+      </div>
+
+   </div>
+
+</div>
+
+<div class="row animated fadeIn" *ngIf="useRecords === 0 && !loading">
+   <div class="col-12">
+
+      <div class="alert alert-info text-center">
+
+         <p class="mb-0 ">No se han encontrado resultados para tu búsqueda</p>
+
+      </div>
+
+   </div>
+</div>
+
+

@@ -4,6 +4,7 @@ import {UserService} from '../../services/user.service';
 import {FileUploadService} from '../../services/file-upload.service';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import Swal from 'sweetalert2';
+import {ModalChangeImageService} from '../../components/modal-change-image/services/modal-change-image.service';
 
 
 @Component({
@@ -37,7 +38,8 @@ export class ProfilePageComponent implements OnInit {
    constructor(
       private _userService: UserService,
       private _formBuilder: FormBuilder,
-      private _fileUploadService: FileUploadService
+      private _fileUploadService: FileUploadService,
+      private _modalChangeImageService: ModalChangeImageService
    ) {
    }
 
@@ -52,8 +54,6 @@ export class ProfilePageComponent implements OnInit {
    }
 
    handleFileInput(file: File) {
-
-      this.imagenUserUpLoad = file;
 
       if (!file) {
 
@@ -81,11 +81,12 @@ export class ProfilePageComponent implements OnInit {
 
       this.avatarFile.nativeElement.click();
 
-   }s
+   }
 
    onUpFile() {
 
-      this._fileUploadService.upLoad(this.imagenUserUpLoad, 'users')
+      this._fileUploadService.upLoad(this.imagenUserUpLoad, 'users', this.user.uid)
+
          .subscribe(({nameFile}) => {
                this.user.img = nameFile;
 
@@ -118,15 +119,13 @@ export class ProfilePageComponent implements OnInit {
 
       this.formSubmitted = true;
 
-      console.log(this.profileForm);
-
       if (this.profileForm.invalid) {
          return;
       }
 
       this._userService.updateUserProfile(this.profileForm.value).subscribe(() => {
 
-         // Se actualiza los datos del usuario con la nueva información, en JavaScript todo
+         // Se actualiza los datos del usuario con la nueva información, en JavaScript todoo
          // es por referencia por eso se cambia los datos en las plantillas donde se haga referencia a UserModel,
          // en caso que no fuera así se podría usar Reduux o Rxjs
          const {email, name} = this.profileForm.value;
@@ -151,8 +150,6 @@ export class ProfilePageComponent implements OnInit {
          });
 
       });
-
-      console.log('onSubmit');
 
    }
 

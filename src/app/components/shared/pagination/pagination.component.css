@@ -1,0 +1,12 @@
+.paginate1 .paginate_button:not(.current):not(:hover) {
+   background-color: #fff;
+}
+
+.paginate1 {
+   font-size: 14px;
+   line-height: 1.25;
+}
+.paginate1 .paginate_button.current {
+   cursor: default;
+}
+

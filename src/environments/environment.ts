@@ -2,7 +2,10 @@
 // `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 
+import { defaultEnvironment } from './environment.defaults';
+
 export const environment = {
+   ...defaultEnvironment,
     production: false,
     baseUrl: 'http://localhost:3005/api'
 };

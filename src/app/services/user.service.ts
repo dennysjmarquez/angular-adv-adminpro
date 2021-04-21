@@ -1,13 +1,14 @@
 import {Injectable, NgZone} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {RegisterForm} from '../interfaces/register-form.interface';
-import {tap} from 'rxjs/operators';
+import {delay, tap} from 'rxjs/operators';
 import {Observable, throwError} from 'rxjs';
-import {environment} from '../../environments/environment';
+import {environment} from '@env';
 import {LoginForm} from '../interfaces/login-form.interface';
 import {LoginGoogleData} from '../interfaces/login-google-data.interface';
 import {Router} from '@angular/router';
 import {UserModel} from '../models/user.model';
+import {SearchService} from './search.service';
 
 declare const gapi: any;
 
@@ -23,7 +24,8 @@ export class UserService {
    constructor(
       private http: HttpClient,
       private _router: Router,
-      private _ngZone: NgZone
+      private _ngZone: NgZone,
+      private _searchService: SearchService
    ) {
    }
 
@@ -151,12 +153,18 @@ export class UserService {
     * Obtiene el Token almacenado localmente
     *
     */
-   get token(): string{
+   get token(): string {
       return localStorage.getItem('token') || '';
    }
 
 
    /**
+    *
+    * Valida el token este método se usa en auth.guard para conceder el acceso o deniegarlo
+    * en ciertas zonas o paginas también almacena información sensible del usuario
+    * en este servicio, tales como: name, email, img, google, role, uid
+    *
+    * En la prop public user: UserModel de la class
     *
     */
    validateToken(): Observable<any> {
@@ -188,7 +196,6 @@ export class UserService {
 
    }
 
-
    createUser(formData: RegisterForm) {
 
       return this.http.post(`${this.baseURL}/users`, formData)
@@ -201,7 +208,6 @@ export class UserService {
          );
 
    }
-
 
    updateUserProfile(formData: { name: string; email: string; }): Observable<any> {
 
@@ -227,6 +233,22 @@ export class UserService {
 
    }
 
+   updateUser(formData: UserModel): Observable<any> {
+
+      // Obtiene el Token almacenado localmente
+      const token = this.token;
+
+      return this.http.put(`${this.baseURL}/users/${formData.uid}`,
+         {
+            ...formData
+         },
+         {
+            headers: {'Authorization': token}
+         }
+      );
+
+   }
+
    loginUser(formData: LoginForm): Observable<any> {
 
       return this.http.post(`${this.baseURL}/login`, formData)
@@ -241,5 +263,46 @@ export class UserService {
 
    }
 
+   /**
+    *
+    * Obtiene los usuarios desde un numero dado
+    *
+    * @param offset {number}
+    */
+   getUsers(offset: number) {
+
+      // Obtiene el Token almacenado localmente
+      const token = this.token;
+
+      return this.http.get(`${this.baseURL}/users?offset=${offset}`, {
+         headers: {'Authorization': token}
+      }).pipe(delay(200));
+
+   }
+
+   /**
+    *
+    * Obtiene los usuarios nediante un término de búsqueda
+    * y muestra los datos a partir de un offset para la paginación
+    *
+    * @param search {string}
+    * @param offset {number}
+    */
+   searchUsers(search: String, offset: number) {
+
+      return this._searchService.searchs(this.token, `${this.baseURL}/search/user?q=${encodeURIComponent(String(search))}&offset=${offset}`);
+
+   }
+
+   deleteUser(uid: string) {
+
+      // Obtiene el Token almacenado localmente
+      const token = this.token;
+
+      return this.http.delete(`${this.baseURL}/users/${uid}`, {
+         headers: {'Authorization': token}
+      });
+
+   }
 
 }
