@@ -1,0 +1,39 @@
+<div class="dataTables_paginate paging_simple_numbers paginate1" *ngIf="pager.totalPages > 1">
+
+   <ng-container *ngIf="pager.currentPage > 1">
+
+      <div *ngIf="firstPage" class="paginate_button"
+           (click)="clicPaginate(1)"
+      ><i class="fa fa-step-backward"></i></div>
+
+      <div *ngIf="previous" class="paginate_button previous"
+           (click)="clicPaginate(pager.currentPage - 1)"
+      ><i class="fa fa-chevron-circle-left"></i></div>
+
+   </ng-container>
+
+   <ng-container *ngIf="this.pager.pages && this.pager.pages.length > 0">
+
+      <div *ngFor="let page of pager.pages"
+           class="paginate_button"
+           [ngClass]="{current:pager.currentPage === page}"
+           (click)="clicPaginate(page)"
+      >
+         {{page}}
+      </div>
+
+   </ng-container>
+
+   <ng-container *ngIf="pager.currentPage !== pager.totalPages">
+
+      <div *ngIf="next" class="paginate_button next"
+           (click)="clicPaginate(pager.currentPage + 1)"
+      ><i class="fa fa-chevron-circle-right"></i></div>
+
+      <div *ngIf="lastPage" class="paginate_button"
+           (click)="clicPaginate(pager.totalPages)"
+      ><i class="fa fa-step-forward"></i></div>
+
+   </ng-container>
+
+</div>

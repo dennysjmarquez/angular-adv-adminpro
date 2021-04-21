@@ -111,22 +111,15 @@ export class RegisterComponent implements OnInit, AfterViewInit {
 
         this.formSubmitted = true;
 
-        console.log(this.registerFrom);
-
         if (this.registerFrom.invalid) {
             return;
         }
 
-        console.log('onSubmit');
-
         this.userService.createUser(this.registerFrom.value)
             .subscribe(resp => {
 
-                console.log('createUser');
-
                 localStorage.removeItem('email');
                 this._router.navigateByUrl('/');
-
 
             }, error => {
                 //console.log(error.error.msg)

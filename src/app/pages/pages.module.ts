@@ -1,11 +1,13 @@
 import {NgModule} from '@angular/core';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {RouterModule} from '@angular/router';
 import {CommonModule} from '@angular/common';
+
 
 // Modules
 import {SharedModule} from '../components/shared/shared.module';
 import {ComponentsModule} from '../components/components.module';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+
 
 // Components Pages
 import {DashboardPageComponent} from './dashboard/dashboard-page.component';
@@ -16,6 +18,10 @@ import {AcountSettingPageComponent} from './acount-setting/acount-setting-page.c
 import {PromisePageComponent} from './promise/promise-page.component';
 import {RxjsPageComponent} from './rxjs/rxjs-page.component';
 import {ProfilePageComponent} from './profile/profile-page.component';
+import {UsersPageComponent} from './maintenance/users/users-page.component';
+import {HospitalsPageComponent} from './maintenance/hospitals/hospitals-page.component';
+import {DoctorsPageComponent} from './maintenance/doctors/doctors-page.component';
+import {SharedModuleModule} from '../sharedModule/shared-module.module';
 
 
 @NgModule({
@@ -27,7 +33,10 @@ import {ProfilePageComponent} from './profile/profile-page.component';
       AcountSettingPageComponent,
       PromisePageComponent,
       RxjsPageComponent,
-      ProfilePageComponent
+      ProfilePageComponent,
+      UsersPageComponent,
+      HospitalsPageComponent,
+      DoctorsPageComponent
    ],
    imports: [
 
@@ -37,11 +46,13 @@ import {ProfilePageComponent} from './profile/profile-page.component';
       // import {AppRoutersModule} from './routers/app-routers.module';
       RouterModule,
 
+
       CommonModule,
-      SharedModule,
       ComponentsModule,
       FormsModule,
-      ReactiveFormsModule
+      ReactiveFormsModule,
+      SharedModule,
+      SharedModuleModule
    ],
    exports: [
       DashboardPageComponent,

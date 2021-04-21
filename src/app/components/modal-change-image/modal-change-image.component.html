@@ -1,0 +1,52 @@
+<div id="modal-imagen" class="fade show" [class.d-none]="hiddenModal">
+   <div
+      class="modal"
+      tabindex="-1" role="dialog"
+      style="display: block; padding-right: 17px;">
+      <div class="modal-dialog" role="document">
+         <div class="modal-content">
+            <div class="modal-header">
+               <h4 class="modal-title" id="exampleModalLabel1">Cargar imagen</h4>
+               <button type="button" class="close cursor-pointer" (click)="closeModal()">
+                  <span>×</span>
+               </button>
+            </div>
+            <div class="modal-body">
+
+
+               <div class="card">
+
+                  <div class="card-body">
+
+                     <div class="form-group">
+
+                        <img [src]="previImagen" class="img-fluid d-block mb-3">
+                        <input type="file" #file (change)="handleFileInput($event.target.files[0])" hidden>
+
+                     </div>
+
+                     <button type="button" class="btn btn-primary" (click)="clickFile()">Cargar imagen</button>
+
+
+                  </div>
+               </div>
+
+
+            </div>
+            <div class="modal-footer">
+               <button type="button" class="btn btn-default" (click)="closeModal()">Cancelar</button>
+
+               <button
+                  type="button"
+                  class="btn btn-success waves-effect waves-light m-r-10"
+
+                  (click)="onUpFile()"><i
+                  class="fa fa-save mr-2"></i>Actualizar  imagen
+               </button>
+            </div>
+         </div>
+      </div>
+   </div>
+
+   <div class="modal-backdrop show"></div>
+</div>

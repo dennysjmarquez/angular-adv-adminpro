@@ -2,87 +2,92 @@
 <!-- Left Sidebar - style you can find in sidebar.scss  -->
 <!-- ============================================================== -->
 <aside class="left-sidebar">
-    <!-- Sidebar scroll-->
-    <div class="scroll-sidebar">
-        <!-- Sidebar navigation-->
-        <nav class="sidebar-nav">
-            <ul id="sidebarnav">
-                <li class="user-profile">
-                    <a aria-expanded="false" class="has-arrow waves-effect waves-dark" href="#"><img
-                            alt="user" [src]="user.getImagen"/><span
-                            class="hide-menu">{{user.name}}</span></a>
-                    <ul aria-expanded="false" class="collapse">
-                        <li><a routerLink="./profile" routerLinkActive="active">My Profile </a></li>
-                        <li><a href="javascript:void()">My Balance</a></li>
-                        <li><a href="javascript:void()">Inbox</a></li>
-                        <li><a routerLink="/dashboard/acount-setting">Account Setting</a></li>
-                        <li><a href="javascript:void(0)" (click)="logOut()">Logout</a></li>
-                    </ul>
-                </li>
+   <!-- Sidebar scroll-->
+   <div class="scroll-sidebar">
+      <!-- Sidebar navigation-->
+      <nav class="sidebar-nav">
+         <ul id="sidebarnav">
+            <li class="user-profile">
+               <a aria-expanded="false" class="has-arrow waves-effect waves-dark" href="#">
+                  <div class="round-2 mr-2">
+                     <img alt="user" [src]="user.getImagen"/>
+                  </div>
+                  <span class="hide-menu">{{user.name}}</span>
+               </a>
+               <ul aria-expanded="false" class="collapse">
+                  <li><a routerLink="./profile" routerLinkActive="active">My Profile </a></li>
+                  <li><a href="javascript:void()">My Balance</a></li>
+                  <li><a href="javascript:void()">Inbox</a></li>
+                  <li><a routerLink="/dashboard/acount-setting">Account Setting</a></li>
+                  <li><a href="javascript:void(0)" (click)="logOut()">Logout</a></li>
+               </ul>
+            </li>
 
-                <li class="nav-devider"></li>
+            <li class="nav-devider"></li>
 
-                <!--Menu sidebar -->
-                <ng-container>
+            <!--Menu sidebar -->
+            <ng-container>
 
-                    <!-- Menú anidado de Múltiples niveles -->
-                    <ng-container *ngTemplateOutlet="menu; context: {data: menuItems}"></ng-container>
+               <!-- Menú anidado de Múltiples niveles -->
+               <ng-container *ngTemplateOutlet="menu; context: {data: menuItems}"></ng-container>
 
-                    <!-- Menú template -->
-                    <ng-template #menu let-data="data">
+               <!-- Menú template -->
+               <ng-template #menu let-data="data">
 
-                        <li *ngFor="let item of data">
+                  <li *ngFor="let item of data">
 
-                            <a aria-expanded="false" class="has-arrow waves-effect waves-dark" href="#">
-                                <i [ngClass]="item['iconClass']"></i>
-                                <span class="hide-menu">
+                     <a aria-expanded="false" class="has-arrow waves-effect waves-dark" href="#">
+                        <i [class]="item['iconClass']"></i>
+                        <span class="hide-menu">
 
                                     {{item.title}}
 
-                                    <span
-                                            *ngIf="item['subMenu']"
-                                            class="label label-rouded label-themecolor pull-right">
+                           <span
+                              *ngIf="item['subMenu']"
+                              class="label label-rouded label-themecolor pull-right">
 
                                         {{item['subMenu'].length}}
 
                                     </span>
                                 </span>
-                            </a>
+                     </a>
 
-                            <ng-container
-                                    *ngTemplateOutlet="item['subMenu'] ? templateSubMenu: null; context:{ data: item['subMenu']}"></ng-container>
+                     <ng-container
+                        *ngTemplateOutlet="item['subMenu'] ? templateSubMenu: null; context:{ data: item['subMenu']}"></ng-container>
 
+                  </li>
+
+               </ng-template>
+
+               <!-- Sub Menú template -->
+               <ng-template #templateSubMenu let-items="data">
+
+                  <ul aria-expanded="false" class="collapse">
+
+                     <ng-container *ngFor="let item of items">
+
+                        <li *ngIf="!item['subMenu'];"><a [routerLink]="item['path']" routerLinkActive="active"
+                                                         [routerLinkActiveOptions]="{ exact: true }">{{item['title']}}</a>
                         </li>
 
-                    </ng-template>
+                        <ng-container
+                           *ngTemplateOutlet="item['subMenu'] ? menu : null; context: {data: [item]}"></ng-container>
 
-                    <!-- Sub Menú template -->
-                    <ng-template #templateSubMenu let-items="data">
+                     </ng-container>
 
-                        <ul aria-expanded="false" class="collapse">
+                  </ul>
 
-                            <ng-container *ngFor="let item of items">
+               </ng-template>
 
-                                <li *ngIf="!item['subMenu'];"><a [routerLink]="item['path']" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">{{item['title']}}</a></li>
+            </ng-container>
 
-                                <ng-container
-                                        *ngTemplateOutlet="item['subMenu'] ? menu : null; context: {data: [item]}"></ng-container>
-
-                            </ng-container>
-
-                        </ul>
-
-                    </ng-template>
-
-                </ng-container>
-
-            </ul>
-        </nav>
+         </ul>
+      </nav>
 
 
-        <!-- End Sidebar navigation -->
-    </div>
-    <!-- End Sidebar scroll-->
+      <!-- End Sidebar navigation -->
+   </div>
+   <!-- End Sidebar scroll-->
 </aside>
 <!-- ============================================================== -->
 <!-- End Left Sidebar - style you can find in sidebar.scss  -->

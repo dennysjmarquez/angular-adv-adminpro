@@ -1,4 +1,7 @@
+import {defaultEnvironment} from './environment.defaults';
+
 export const environment = {
-    production: true,
-    baseUrl: 'http://localhost:3005/api'
+   ...defaultEnvironment,
+   production: true,
+   baseUrl: 'http://localhost:3005/api'
 };

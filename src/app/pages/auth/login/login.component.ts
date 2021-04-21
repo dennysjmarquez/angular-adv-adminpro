@@ -89,17 +89,11 @@ export class LoginComponent implements OnInit, AfterViewInit {
 
       this.formSubmitted = true;
 
-      console.log(this.loginFrom);
-
       if (this.loginFrom.invalid) {
          return;
       }
 
-      console.log('onSubmit');
-
       this.userService.loginUser(this.loginFrom.value).subscribe(resp => {
-
-         console.log('onSubmit loginUser', resp);
 
          if (this.loginFrom.value.remember) {
 
