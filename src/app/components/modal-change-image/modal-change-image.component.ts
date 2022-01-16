@@ -1,131 +1,117 @@
-import {Component, ViewChild, Input, SimpleChanges} from '@angular/core';
-import {ModalChangeImageService} from './services/modal-change-image.service';
-import {environment} from '@env';
+import { Component, EventEmitter, Input, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { environment } from '@env';
 import Swal from 'sweetalert2';
-import {FileUploadService} from 'src/app/services/file-upload.service';
+import { FileUploadService } from 'src/app/services/file-upload.service';
 
 // Services
 
 @Component({
-   selector: 'app-modal-change-image',
-   templateUrl: './modal-change-image.component.html',
-   styles: [
-      `
-
-         .img-fluid {
-            max-height: 300px;
-         }
-
-      `]
+	selector: 'app-modal-change-image',
+	templateUrl: './modal-change-image.component.html',
+	styles: [
+		`
+			.img-fluid {
+				max-height: 300px;
+			}
+		`,
+	],
 })
 export class ModalChangeImageComponent {
+	@ViewChild('file') file;
 
-   @ViewChild('file') file;
-   @Input('hiddenModal') hiddenModal: boolean = false;
-   imagenUserUpLoad: File;
+	@Input('type') type: 'users' | 'medicos' | 'hospitals';
+	@Input('refModel') refModel: any;
 
-   public type: 'users' | 'medicos' | 'hospitals';
-   public previImagen: string = '';
+	@Input('openModal') openModal: boolean = false;
+	@Output('onClose') onClose = new EventEmitter<any>();
 
+	imagenUserUpLoad: File;
+	public prevImagen: string = '';
+	private _typeRefImg: any;
 
-   constructor(
-      private _modalChangeImageService: ModalChangeImageService,
-      private _fileUploadService: FileUploadService
-   ) {
-   }
+	constructor(private _fileUploadService: FileUploadService) {}
 
-   ngOnChanges(changes: SimpleChanges) {
+	get refImg() {
+		return this._typeRefImg.img;
+	}
 
-      if (changes.hasOwnProperty('hiddenModal') && !changes.hiddenModal.currentValue) {
+	set refImg(value) {
+		this._typeRefImg.img = value;
+	}
 
-         this.type = this._modalChangeImageService.type;
-         this.previImagen = this._modalChangeImageService.refImg;
+	ngOnChanges(changes: SimpleChanges) {
+		if (changes.hasOwnProperty('openModal') && changes.openModal.currentValue) {
+			this._typeRefImg = this.refModel;
+			this.prevImagen = this.refImg;
+			this.getImagen();
+		}
+	}
 
-         this.getImagen();
+	handleFileInput(file: File) {
+		if (!file) {
+			this.imagenUserUpLoad = null;
+			return;
+		}
 
+		const reader = new FileReader();
 
-      }
+		this.imagenUserUpLoad = file;
+		reader.readAsDataURL(file);
+		reader.onload = (event: any) => {
+			this.prevImagen = event.target.result;
+		};
+	}
 
-   }
+	getImagen() {
+		this.prevImagen =
+			this.prevImagen && this.prevImagen.includes('://')
+				? this.prevImagen
+				: `${environment.baseUrl}/upload/${this.type}/${this.prevImagen || 'no-imagen'}`;
+	}
 
-   handleFileInput(file: File) {
+	clickFile() {
+		const fileUpload = this.file.nativeElement;
+		fileUpload.onchange = () => this.imagenUserUpLoad;
 
-      if (!file) {
+		this.file.nativeElement.click();
+	}
 
-         this.imagenUserUpLoad = null;
-         return;
+	onUpFile() {
+		if (!this.imagenUserUpLoad) {
+			return;
+		}
 
-      }
+		this._fileUploadService
+			.upLoad(this.imagenUserUpLoad, this.type, this.refModel.uid)
 
-      const reader = new FileReader();
+			.subscribe(
+				({ nameFile }) => {
+					this.refImg = nameFile;
 
-      this.imagenUserUpLoad = file;
-      reader.readAsDataURL(file);
-      reader.onload = (event: any) => {
-         this.previImagen = event.target.result;
-      };
+					Swal.fire({
+						title: 'Atención!',
+						text: 'Su imagen fue actualizada, con éxito ',
+						icon: 'success',
+						confirmButtonText: 'Ok',
+					});
+					this.file.nativeElement.value = null;
+					this.imagenUserUpLoad = null;
+               setTimeout(() => this.closeModal(true), 100);
 
-   }
+				},
+				(error) => {
+					Swal.fire({
+						title: 'Error!',
+						text: error.error.msg,
+						icon: 'error',
+						confirmButtonText: 'Ok',
+					});
+				}
+			);
+	}
 
-   getImagen() {
-
-      this.previImagen = this.previImagen && this.previImagen.includes('://')
-         ? this.previImagen
-         : `${environment.baseUrl}/upload/${this.type}/${this.previImagen || 'no-imagen'}`;
-
-   }
-
-   clickFile() {
-
-      const fileUpload = this.file.nativeElement;
-      fileUpload.onchange = () => this.imagenUserUpLoad;
-
-      this.file.nativeElement.click();
-
-   }
-
-   onUpFile() {
-
-      if (!this.imagenUserUpLoad) {
-         return;
-      }
-
-      this._fileUploadService.upLoad(this.imagenUserUpLoad, this.type, this._modalChangeImageService.uid)
-
-         .subscribe(({nameFile}) => {
-
-               this._modalChangeImageService.refImg = nameFile;
-
-               Swal.fire({
-                  title: 'Atención!',
-                  text: 'Su imagen fue actualizada, con éxito ',
-                  icon: 'success',
-                  confirmButtonText: 'Ok'
-               });
-
-               this.file.nativeElement.value = null;
-               this.imagenUserUpLoad = null;
-
-               this.closeModal();
-
-            },
-            error => {
-
-               Swal.fire({
-                  title: 'Error!',
-                  text: error.error.msg,
-                  icon: 'error',
-                  confirmButtonText: 'Ok'
-               });
-
-            });
-
-   }
-
-   closeModal() {
-
-      this.previImagen = '';
-      this._modalChangeImageService.closeModal();
-   }
-
+	closeModal(upFile: boolean = false) {
+		this.prevImagen = '';
+		this.onClose.emit();
+	}
 }

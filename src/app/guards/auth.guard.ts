@@ -1,42 +1,35 @@
-import {Injectable} from '@angular/core';
-import {CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree} from '@angular/router';
-import {Observable, of} from 'rxjs';
-import {catchError, map} from 'rxjs/operators';
-
-import {Router} from '@angular/router';
+import { Injectable } from '@angular/core';
+import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
+import { Observable, of } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
 
 // Services
-import {UserService} from '../services/user.service';
+import { AuthService } from '../services/auth.service';
 
 @Injectable({
-    providedIn: 'root'
+	providedIn: 'root',
 })
 export class AuthGuard implements CanActivate {
+	constructor(private _authService: AuthService, private _Router: Router) {}
 
-    constructor(private _UserService: UserService, private _Router: Router) {
-    }
+	canActivate(
+		next: ActivatedRouteSnapshot,
+		state: RouterStateSnapshot
+	): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
+		return this._authService.validateToken().pipe(
+			map(() => {
+				return true;
+			}),
 
-    canActivate(
-        next: ActivatedRouteSnapshot,
-        state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
+			catchError((err) => {
+				this._Router.navigateByUrl('/login');
 
-        return this._UserService.validateToken().pipe(map(() => {
-                return true;
-            }),
-
-            catchError((err) => {
-
-                this._Router.navigateByUrl('/login');
-
-                // el " of " permite crar un observable
-                // en base a un argumento en este caso false,
-                // esto para no romper el siclo del tipo esperado que es
-                // un observable
-                return of(false);
-
-            })
-        );
-
-    }
-
+				// el " of " permite crar un observable
+				// en base a un argumento en este caso false,
+				// esto para no romper el siclo del tipo esperado que es
+				// un observable
+				return of(false);
+			})
+		);
+	}
 }

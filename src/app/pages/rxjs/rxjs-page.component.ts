@@ -1,20 +1,17 @@
 import {Component, OnDestroy} from '@angular/core';
-import {interval, Observable, Subscription} from 'rxjs';
-import {take, map, filter} from 'rxjs/operators';
+import {interval, Observable, Observer, Subscription} from 'rxjs';
+import {filter, map, take} from 'rxjs/operators';
 
 @Component({
-  selector: 'app-rxjs-page',
-  templateUrl: './rxjs-page.component.html',
-  styles: [
-  ]
+   selector: 'app-rxjs-page',
+   templateUrl: './rxjs-page.component.html',
+   styles: [],
 })
-export class RxjsPageComponent implements OnDestroy{
+export class RxjsPageComponent implements OnDestroy {
+   private _intervalSubs: Subscription;
 
-  private _intervalSubs: Subscription;
-
-  constructor() {
-
-    /*
+   constructor() {
+      /*
     this.returnObservable().pipe(
 
       // Retry() es para reintentar ejecutar el Observable si este falla
@@ -29,73 +26,58 @@ export class RxjsPageComponent implements OnDestroy{
       ()=>console.log('ob$ Terminado'));
 */
 
-    this._intervalSubs =this.returnInterval().pipe(
+      this._intervalSubs = this.returnInterval()
+         .pipe(
+            // Especifica cuantas veces se va a ejecutar el Observable
+            take(10),
 
-      // Especifica cuantas veces se va a ejecutar el Observable
-      take(10),
+            // Sirve para filtrar los valores y en este caso solo se muestran
+            // los números pares
+            filter((value) => value % 2 === 0),
 
-      // Sirve para filtrar los valores y en este caso solo se muestran
-      // los números que no son impares
-      filter(value => value % 2 === 0),
+            // Este operador recibe la información y la muta
+            map((value) => {
+               return 'Hola mundo ' + (value + 1);
+            })
+         )
+         .subscribe(
+            (valor) => console.log('[returnInterval] valor', valor),
+            (error) => console.warn('[returnInterval] Error', error),
+            () => console.log('[returnInterval] Terminado')
+         );
+   }
 
-      // Este operador recibe la información y la muta
-      map(value =>{
-        return 'Hola mundo ' + (value + 1)
-      }),
+   ngOnDestroy(): void {
+      this._intervalSubs.unsubscribe();
+   }
 
+   returnInterval() {
+      return interval(100);
+   }
 
-    ).subscribe(
-      (valor)=>console.log('[returnInterval] valor', valor),
-      (error) =>console.warn('[returnInterval] Error', error),
-      ()=>console.log('[returnInterval] Terminado'));
+   returnObservable(): Observable<number> {
+      let i = 0;
 
-  }
+      const ob$ = new Observable((observer: Observer<number>) => {
 
-  ngOnDestroy(): void {
+         const interval = setInterval(() => {
+            observer.next(i);
 
-    this._intervalSubs.unsubscribe();
+            if (i === 4) {
+               clearInterval(interval);
+               observer.complete();
+            }
 
-  }
+            if (i === 2) {
+               i = 0;
 
-  returnInterval(): Observable<number>{
+               observer.error('i llego al valor 2');
+            }
 
-    return interval(100);
+            ++i;
+         }, 1000);
+      });
 
-  }
-
-  returnObservable(): Observable<number>{
-
-    let i = 0;
-
-    const ob$ = new Observable<number>(observer =>{
-
-      const interval = setInterval(()=>{
-
-        observer.next(i);
-
-        if(i === 4) {
-
-          clearInterval(interval);
-          observer.complete();
-
-        }
-
-        if(i === 2) {
-
-          i = 0;
-
-          observer.error('i llego al valor 2')
-
-        }
-
-        ++i;
-
-      }, 1000);
-
-    });
-
-    return ob$;
-
-  }
-
+      return ob$;
+   }
 }

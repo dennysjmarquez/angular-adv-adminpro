@@ -19,12 +19,6 @@ export class PagesComponent implements OnInit {
    ) {
    }
 
-   get hiddenModal() {
-
-      return this._modalChangeImageService.hiddenModal;
-
-   }
-
    ngOnInit(): void {
       customScriptINI();
    }

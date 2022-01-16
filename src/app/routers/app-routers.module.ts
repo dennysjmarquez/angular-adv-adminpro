@@ -1,29 +1,24 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 
 // Paginas
-import {ErrorPage404Component} from '../statusCodesPages/404/errorpage404.component';
+import { ErrorPage404Component } from '../statusCodesPages/404/errorpage404.component';
 
 // Routers
-import {PagesRouter} from '../pages/pages-router';
-import {AuthRouter} from '../pages/auth/auth-router';
+import { PagesRouter } from '../pages/pages-router';
+import { AuthRouter } from '../pages/auth/auth-router';
 
 const APP_ROUTES: Routes = [
-
-  { path: '',  pathMatch: 'full', redirectTo: '/dashboard' },
-  { path: '**',  component: ErrorPage404Component }
-
+	{ path: '', pathMatch: 'full', redirectTo: '/dashboard' },
+	{ path: '404', component: ErrorPage404Component },
+	{ path: '**', redirectTo: '/404' },
 ];
 
-const APP_ROUTING = RouterModule.forRoot( APP_ROUTES, { useHash: true} );
+const APP_ROUTING = RouterModule.forRoot(APP_ROUTES, { useHash: true });
 
 @NgModule({
-  declarations: [],
-  imports: [
-    APP_ROUTING,
-    PagesRouter,
-    AuthRouter
-  ],
-  exports: [RouterModule]
+	declarations: [],
+	imports: [APP_ROUTING, PagesRouter, AuthRouter],
+	exports: [RouterModule],
 })
-export class AppRoutersModule {  }
+export class AppRoutersModule {}

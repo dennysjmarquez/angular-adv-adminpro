@@ -1,0 +1,57 @@
+<div class="row animated fadeIn">
+   <div class="col-12">
+      <div class="card">
+         <div class="card-body">
+            <h4 class="card-title">Médico</h4>
+            <h6 class="card-subtitle">Actualizar información</h6>
+            <form (ngSubmit)="saveMedico()" [formGroup]="medicoForm" class="form p-t-20 col-md-5">
+               <div *ngIf="medicoSelect" class="form-group animated fadeIn">
+                  <label>Foto</label>
+                  <div class="input-group">
+
+                     <div [ngStyle]="{width: '200px'}" class="p-0 mt-3">
+                        <img (click)="openImageModal()" [alt]="medicoSelect.name"
+                             [src]="medicoSelect.img | getImage:'medicos'" class="card-img-top img-thumbnail cursor-pointer">
+                     </div>
+
+                  </div>
+               </div>
+               <div class="form-group">
+                  <label>Nombre</label>
+                  <div class="input-group">
+                     <div class="input-group-addon"><i class="ti-user"></i></div>
+                     <input class="form-control" formControlName="name" placeholder="Nombre" type="text">
+                  </div>
+               </div>
+               <div class="form-group">
+                  <label>Hospital</label>
+                  <div class="input-group">
+
+                     <div class="d-flex flex-column w-100">
+                        <select class="custom-select w-100" formControlName="hospital" id="exampleInputEmail1">
+                           <option disabled selected value="null">Selecciona un hospital</option>
+                           <option *ngFor="let hospital of hospitals;" [value]="hospital.uid">{{hospital.name}}</option>
+                        </select>
+
+                        <div [ngStyle]="{width: '200px'}" class="p-0 mt-3">
+                           <img [alt]="hospitalSelect?.name" [src]="hospitalSelect?.img | getImage:'hospitals'"
+                                class="card-img-top img-thumbnail">
+                        </div>
+                     </div>
+
+                  </div>
+
+               </div>
+               <button [disabled]="medicoForm.invalid" class="btn btn-success waves-effect waves-light m-r-10"
+                       type="submit">Guardar
+               </button>
+            </form>
+
+         </div>
+      </div>
+   </div>
+
+</div>
+
+<app-modal-change-image (onClose)="onModalImgChangeClose()" [openModal]="openModalImg" [refModel]="ref_Model_ModalImg"
+                        type="medicos"></app-modal-change-image>

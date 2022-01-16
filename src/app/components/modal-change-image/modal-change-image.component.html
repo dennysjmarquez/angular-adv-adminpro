@@ -1,4 +1,4 @@
-<div id="modal-imagen" class="fade show" [class.d-none]="hiddenModal">
+<div id="modal-imagen" class="fade show" [class.d-none]="!openModal">
    <div
       class="modal"
       tabindex="-1" role="dialog"
@@ -6,7 +6,7 @@
       <div class="modal-dialog" role="document">
          <div class="modal-content">
             <div class="modal-header">
-               <h4 class="modal-title" id="exampleModalLabel1">Cargar imagen</h4>
+               <h4 class="modal-title" id="exampleModalLabel1">Cargar imagen de: {{refModel?.name}}</h4>
                <button type="button" class="close cursor-pointer" (click)="closeModal()">
                   <span>×</span>
                </button>
@@ -20,7 +20,7 @@
 
                      <div class="form-group">
 
-                        <img [src]="previImagen" class="img-fluid d-block mb-3">
+                        <img [src]="prevImagen" class="img-fluid d-block mb-3">
                         <input type="file" #file (change)="handleFileInput($event.target.files[0])" hidden>
 
                      </div>

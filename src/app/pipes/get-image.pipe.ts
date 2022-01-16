@@ -1,20 +1,13 @@
-import {Pipe, PipeTransform} from '@angular/core';
-import {environment} from '@env';
+import { Pipe, PipeTransform } from '@angular/core';
+import { environment } from '@env';
 
 const baseUrl = environment.baseUrl;
 
 @Pipe({
-   name: 'getImage'
+	name: 'getImage',
 })
 export class GetImagePipe implements PipeTransform {
-
-   transform(value: any, type: 'users' | 'medicos' | 'hospitals'): any {
-
-      if(type !== ('users' || 'medicos' || 'hospitals') ) return '';
-
-      return value && value.includes('://')
-         ? value
-         : `${baseUrl}/upload/${type}/${value || 'no-imagen'}`;
-
-   }
+	transform(value: any, type: 'users' | 'medicos' | 'hospitals'): any {
+		return value && value.includes('://') ? value : `${baseUrl}/upload/${type}/${value || 'no-imagen'}`;
+	}
 }

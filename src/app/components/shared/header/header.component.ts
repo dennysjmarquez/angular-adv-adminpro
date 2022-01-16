@@ -1,33 +1,23 @@
-import {Component, OnInit} from '@angular/core';
-import {Router} from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
-import {UserService} from '../../../services/user.service';
-import {UserModel} from '../../../models/user.model';
-
-declare var gapi: any;
+import { AuthService } from '../../../services/auth.service';
+import { UserModel } from '../../../models/user.model';
+import { UserService } from 'src/app/pages/maintenance/users/services/user.service';
 
 @Component({
-    selector: 'app-header',
-    templateUrl: './header.component.html',
-    styles: []
+	selector: 'app-header',
+	templateUrl: './header.component.html',
+	styles: [],
 })
 export class HeaderComponent implements OnInit {
+	user: UserModel = this._userService.user;
 
-    user: UserModel = this._userService.user;
-    
-    constructor(
-        private _router: Router,
-        private _userService: UserService,
-    ) {
-    }
+	constructor(private _router: Router, private _userService: UserService, private _authService: AuthService) {}
 
-    ngOnInit(): void {
-    }
+	ngOnInit(): void {}
 
-    logOut() {
-
-        this._userService.google.logOut(() => this._router.navigateByUrl('/login'));
-
-    }
-
+	logOut() {
+		this._authService.google.logOut(() => this._router.navigateByUrl('/login'));
+	}
 }

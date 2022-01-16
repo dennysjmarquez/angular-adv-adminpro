@@ -1,16 +1,16 @@
 import {Injectable} from '@angular/core';
 import Swal, {SweetAlertIcon} from 'sweetalert2';
 
-import {UserService} from './user.service';
+import {AuthService} from './auth.service';
 
 declare var gapi: any;
 
 @Injectable({
     providedIn: 'root'
 })
-export class GoogleLoginService {
+export class GoogleAuthService {
 
-    constructor(private userService: UserService) {
+    constructor(private _authService: AuthService) {
     }
 
     makertGoogleLoginBtn(options: {
@@ -40,7 +40,7 @@ export class GoogleLoginService {
 
 
         // Inicia el login con Google
-        this.userService.google.startApp('goole-signin').then((profile: any) => {
+        this._authService.google.startApp('goole-signin').then((profile: any) => {
 
             options.callbackStartApp(profile);
 

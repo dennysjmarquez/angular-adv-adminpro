@@ -2,8 +2,8 @@ import {Component, NgZone, OnInit, AfterViewInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
 import Swal from 'sweetalert2';
-import {UserService} from '../../../services/user.service';
-import {GoogleLoginService} from '../../../services/google-login.service';
+import {UserService} from '../../maintenance/users/services/user.service';
+import {GoogleAuthService} from '../../../services/google-auth.service';
 
 declare function customScriptINI();
 
@@ -37,7 +37,7 @@ export class RegisterComponent implements OnInit, AfterViewInit {
         private userService: UserService,
         private _router: Router,
         private ngZone: NgZone,
-        private googleLoginService: GoogleLoginService
+        private googleLoginService: GoogleAuthService
     ) {
     }
 

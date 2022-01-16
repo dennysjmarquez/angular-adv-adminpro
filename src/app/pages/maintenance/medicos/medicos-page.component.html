@@ -9,7 +9,7 @@
                   #elemSearch
                   (input)="search(elemSearch.value)"
                   class="form-control"
-                  placeholder="Buscar usuario"
+                  placeholder="Buscar medico"
                   type="text"
                >
 
@@ -34,6 +34,10 @@
 <div class="row">
 
    <div class="col-12">
+
+      <div class="text-center mt-3">
+         <button [routerLink]="['/dashboard/doctor/new']" class="btn btn-primary">Crear medico</button>
+      </div>
 
       <div class="dataTables_wrapper d-flex pt-2 pb-2 justify-content-between align-items-center">
 
@@ -68,59 +72,29 @@
                   <table class="table vm no-th-brd pro-of-month">
                      <thead>
                      <tr>
-                        <th>Avatar</th>
+                        <th>Foto</th>
                         <th>Nambre</th>
-                        <th>Email</th>
-                        <th>Role</th>
-                        <th>Auth</th>
                         <th *ngIf="userService.user.role === ROLE_ADMIN" class="text-nowrap">Acciones</th>
                      </tr>
                      </thead>
                      <tbody>
 
 
-                     <tr *ngFor="let user of users;">
+                     <tr *ngFor="let medico of medicos;">
 
-                        <td (click)="openImageModal(user)" class="w50 cursor-pointer">
+                        <td (click)="openImageModal(medico)" class="w50 cursor-pointer">
                            <span class="round">
-                              <img [src]="user.img | getImage:'users'" class="img-fluid">
+                              <img [src]="medico.img | getImage:'medicos'" class="img-fluid">
                            </span>
                         </td>
 
-                        <td>{{user.name}}</td>
-                        <td>{{user.email}}</td>
-                        <td class="w100">
-
-                           <ng-container
-                              *ngIf="
-                              user.uid !== userService.user.uid &&
-                              userService.user.role === ROLE_ADMIN"
-                           >
-
-                              <select (change)="changeUserRole(user)"
-                                      [(ngModel)]="user.role"
-                                      class="custom-select cursor-pointer"
-                              >
-                                 <option value="ADMIN_ROLE">Admin</option>
-                                 <option value="USER_ROLE">User</option>
-                              </select>
-
-                           </ng-container>
-
-                           <ng-container *ngIf="user.uid === userService.user.uid">
-                              {{user.role}}
-                           </ng-container>
-
-                        </td>
-                        <td class="w100">
-
-                           <span *ngIf="user.google" class="label label-danger">Google</span>
-                           <span *ngIf="!user.google" class="label label-info">Normal</span>
-
-                        </td>
+                        <td>{{medico.name}}</td>
                         <td *ngIf="userService.user.role === ROLE_ADMIN" class="text-nowrap w100 text-center">
-                           <a (click)="deleteUser(user)" *ngIf="user.uid !== userService.user.uid"
-                              class="cursor-pointer" data-original-title="Borrar"
+                           <a [routerLink]="['/dashboard/doctor', medico.uid ]" class="cursor-pointer "
+                              data-original-title="Editar"
+                              data-toggle="tooltip" style="margin-right: 20px; color: #000"> <i
+                              class="fa fa-pencil"></i> </a>
+                           <a (click)="deleteMedico(medico)" class="cursor-pointer" data-original-title="Borrar"
                               data-toggle="tooltip"> <i
                               class="fa fa-close text-danger"></i> </a>
                         </td>
@@ -153,4 +127,6 @@
    </div>
 </div>
 
-<app-modal-change-image type="users" [refModel]="ref_Model_ModalImg" [openModal]="openModalImg" (onClose)="onModalImgChangeClose()"></app-modal-change-image>
+<app-modal-change-image (onClose)="onModalImgChangeClose()" [openModal]="openModalImg" [refModel]="ref_Model_ModalImg"
+                        type="medicos"></app-modal-change-image>
+
