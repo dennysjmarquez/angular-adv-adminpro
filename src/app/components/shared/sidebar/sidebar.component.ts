@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 
 // Services
 import { SidebarService } from '../../../services/sidebar.service';
-import { UserService } from '../../../pages/maintenance/users/services/user.service';
 import { AuthService } from '../../../services/auth.service';
 import { Router } from '@angular/router';
 import { UserModel } from '../../../models/user.model';
@@ -14,15 +13,14 @@ import { UserModel } from '../../../models/user.model';
 })
 export class SidebarComponent implements OnInit {
 	menuItems: any[];
-	user: UserModel = this._userService.user;
+	user: UserModel = this._authService.currentUser;
 
-	constructor(
-		private _sidebarService: SidebarService,
-		private _userService: UserService,
-		private _authService: AuthService,
-		private _router: Router
-	) {
-		this.menuItems = this._sidebarService.menu;
+	constructor(private _sidebarService: SidebarService, private _authService: AuthService, private _router: Router) {
+		const {
+			currentUser: { role },
+		} = _authService;
+
+		this.menuItems = this._sidebarService.getMenu(role);
 	}
 
 	ngOnInit(): void {}

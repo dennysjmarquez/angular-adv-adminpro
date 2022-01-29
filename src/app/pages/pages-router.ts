@@ -16,6 +16,8 @@ import { UsersPageComponent } from './maintenance/users/users-page.component';
 import { MedicosPageComponent } from './maintenance/medicos/medicos-page.component';
 import { HospitalsPageComponent } from './maintenance/hospitals/hospitals-page.component';
 import { MedicoPageComponent } from './maintenance/medicos/medico/medico-page.component';
+import { SearchesComponent } from './searches/searches.component';
+import { RolGuard } from '../guards/rol.guard';
 
 const APP_ROUTES: Routes = [
 	// Template principal
@@ -31,10 +33,16 @@ const APP_ROUTES: Routes = [
 			{ path: 'rxjs', component: RxjsPageComponent, data: { title: 'RxJs' } },
 			{ path: 'acount-setting', component: AcountSettingPageComponent, data: { title: 'Acount Setting' } },
 			{ path: 'profile', component: ProfilePageComponent, data: { title: 'Profile' } },
+			{ path: 'searches/:q', component: SearchesComponent, data: { title: 'Búsqueda globales' } },
 
 			// Maintenance
 
-			{ path: 'users', component: UsersPageComponent, data: { title: 'Mantenimiento de Usuarios' } },
+			{
+				path: 'users',
+				canActivate: [RolGuard],
+				component: UsersPageComponent,
+				data: { title: 'Mantenimiento de Usuarios' },
+			},
 			{ path: 'hospitals', component: HospitalsPageComponent, data: { title: 'Mantenimiento de Hospitales' } },
 			{ path: 'doctors', component: MedicosPageComponent, data: { title: 'Mantenimiento de Médicos' } },
 			{ path: 'doctor/new', component: MedicoPageComponent, data: { title: 'Mantenimiento de médico | Nuevo' } },

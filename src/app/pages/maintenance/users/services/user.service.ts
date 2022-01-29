@@ -14,14 +14,14 @@ import { AuthService } from '../../../../services/auth.service';
 export class UserService {
 	baseURL = environment.baseUrl;
 
-	public user: UserModel = this._authService.currentUser;
-
 	constructor(private http: HttpClient, private _searchService: SearchService, private _authService: AuthService) {}
 
 	updateUserProfile(formData: { name: string; email: string }): Observable<any> {
+		const { role, uid } = this._authService.currentUser;
+
 		return this.http.put(
-			`${this.baseURL}/users/${this.user.uid}`,
-			{ ...formData, role: this.user.role },
+			`${this.baseURL}/users/${uid}`,
+			{ ...formData, role },
 			{ headers: { Authorization: this._authService.token } }
 		);
 	}
@@ -66,7 +66,6 @@ export class UserService {
 	 */
 	searchUsers(search: String, offset: number) {
 		return this._searchService.searchs(
-			this._authService.token,
 			`${this.baseURL}/search/user?q=${encodeURIComponent(String(search))}&offset=${offset}`
 		);
 	}

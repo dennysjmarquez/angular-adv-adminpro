@@ -39,7 +39,6 @@ export class MedicosService {
 	 */
 	searchMedicos(search: String, offset: number) {
 		return this._searchService.searchs(
-			this._authService.token,
 			`${this.baseURL}/search/medico?q=${encodeURIComponent(String(search))}&offset=${offset}`
 		);
 	}

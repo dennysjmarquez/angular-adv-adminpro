@@ -1,13 +1,16 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { HospitalsService } from './services/hospitals.service';
-import { HospitalsModel } from '../../../models/hospitals.model';
-import { UserService } from '../users/services/user.service';
+import { AuthService } from 'src/app/services/auth.service';
 import { ModalChangeImageService } from '../../../components/modal-change-image/services/modal-change-image.service';
 import { RemoveAllTooltipsFloatService } from '../../../helpers/remove-all-tooltips-float.service';
+
+import { HospitalsModel } from '../../../models/hospitals.model';
+
 
 import { PaginationComponent } from '../../../components/shared/pagination/pagination.component';
 import { environment } from '@env';
 import Swal from 'sweetalert2';
+import { UserModel } from 'src/app/models/user.model';
 
 declare var $;
 
@@ -35,12 +38,12 @@ export class HospitalsPageComponent implements OnInit {
 
 	constructor(
 		private _hospitalsService: HospitalsService,
-		private _userService: UserService,
+		private _authService: AuthService,
 		private _modalChangeImageService: ModalChangeImageService
 	) {}
 
-	get userService() {
-		return this._userService;
+	get currentUser(): UserModel {
+		return this._authService.currentUser;
 	}
 
 	ngOnInit(): void {
@@ -55,31 +58,30 @@ export class HospitalsPageComponent implements OnInit {
 		// Muestra el loading
 		this.loading = true;
 
-      return new Promise((resolve, reject) => {
-
-         this._hospitalsService.getHospitals(this.offset).subscribe(
-            ({ hospitals, records, limit }: any) => {
-               this.hospitals = hospitals;
-               this.records = records;
-               this.limit = limit;
-               resolve();
-            },
-            (error) => {
-               console.log(error);
-               reject(error)
-            },
-            () => {
-               // Oculta el loading
-               this.loading = false;
-            }
-         );
-
-      });
-
-
+		return new Promise((resolve, reject) => {
+			this._hospitalsService.getHospitals(this.offset).subscribe(
+				({ hospitals, records, limit }: any) => {
+					this.hospitals = hospitals;
+					this.records = records;
+					this.limit = limit;
+					resolve();
+				},
+				(error) => {
+					reject(error);
+				},
+				() => {
+					// Oculta el loading
+					this.loading = false;
+				}
+			);
+		});
 	}
 
 	openImageModal(hospital: HospitalsModel) {
+		if (this.currentUser.role !== this.ROLE_ADMIN) {
+			return;
+		}
+
 		this.ref_Model_ModalImg = hospital;
 		this.openModalImg = true;
 	}
@@ -206,9 +208,9 @@ export class HospitalsPageComponent implements OnInit {
 		}).then(({ isConfirmed, value }) => {
 			if (isConfirmed && value.trim().length > 0) {
 				this._hospitalsService.createHospital({ name: value.trim(), img: null }).subscribe(
-               (response: any) => {
+					(response: any) => {
 						this.getHospitals().then(() => {
-							const hospital = this.hospitals.find((hospital) => hospital.uid === response.hospital.uid)
+							const hospital = this.hospitals.find((hospital) => hospital.uid === response.hospital.uid);
 							this.openImageModal(hospital || response.hospital);
 						});
 					},

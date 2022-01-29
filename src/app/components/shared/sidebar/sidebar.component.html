@@ -10,14 +10,14 @@
             <li class="user-profile">
                <a aria-expanded="false" class="has-arrow waves-effect waves-dark" href="#">
                   <div class="round-2 mr-2">
-                     <img alt="user" [src]="user.getImagen"/>
+                     <img alt="user" [src]="user.img | getImage:'users'"/>
                   </div>
                   <span class="hide-menu">{{user.name}}</span>
                </a>
                <ul aria-expanded="false" class="collapse">
                   <li><a routerLink="./profile" routerLinkActive="active">My Profile </a></li>
                   <li><a href="javascript:void()">My Balance</a></li>
-                  <li><a href="javascript:void()">Inbox</a></li>
+                  <li><a href="javascript:void( )">Inbox</a></li>
                   <li><a routerLink="/dashboard/acount-setting">Account Setting</a></li>
                   <li><a href="javascript:void(0)" (click)="logOut()">Logout</a></li>
                </ul>

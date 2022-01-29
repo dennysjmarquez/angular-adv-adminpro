@@ -1,0 +1,107 @@
+<app-loading [loading]="loading"></app-loading>
+<div *ngIf="!loading" class="row">
+
+   <div class="col-md-4">
+      <div class="card">
+         <div class="card-body">
+            <h4 class="card-title">Usuario</h4>
+            <div *ngIf="results.users.length === 0" class="row animated fadeIn">
+               <div class="col-12">
+                  <div class="alert alert-info text-center">
+                     <p class="mb-0 ">No hay usuario con este término</p>
+                  </div>
+               </div>
+            </div>
+            <div *ngIf="results.users.length > 0" class="table-responsive">
+               <table class="table">
+                  <thead>
+                  <tr>
+                     <th>Foto</th>
+                     <th>Nombre</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <tr *ngFor="let user of results.users">
+                     <td class="w50">
+                           <span class="round">
+                              <img [src]="user.img | getImage:'users'" class="img-fluid">
+                           </span>
+                     </td>
+                     <td>{{user.name}}</td>
+                  </tr>
+                  </tbody>
+               </table>
+            </div>
+         </div>
+      </div>
+   </div>
+
+   <div class="col-md-4">
+      <div class="card">
+         <div class="card-body">
+            <h4 class="card-title">Hospitales</h4>
+            <div *ngIf="results.hospitals.length === 0" class="row animated fadeIn">
+               <div class="col-12">
+                  <div class="alert alert-info text-center">
+                     <p class="mb-0 ">No hay Hospitale con este término</p>
+                  </div>
+               </div>
+            </div>
+            <div *ngIf="results.hospitals.length > 0" class="table-responsive">
+               <table class="table">
+                  <thead>
+                  <tr>
+                     <th>Foto</th>
+                     <th>Nombre</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <tr *ngFor="let hospital of results.hospitals">
+                     <td class="w50">
+                        <img [alt]="hospital.name" [src]="hospital.img | getImage:'hospitals'" class="img-fluid">
+                     </td>
+                     <td>{{hospital.name}}</td>
+                  </tr>
+                  </tbody>
+               </table>
+            </div>
+         </div>
+      </div>
+   </div>
+
+   <div class="col-md-4">
+      <div class="card">
+         <div class="card-body">
+            <h4 class="card-title">Hospitales</h4>
+            <div *ngIf="results.medicos.length === 0" class="row animated fadeIn">
+               <div class="col-12">
+                  <div class="alert alert-info text-center">
+                     <p class="mb-0 ">No hay Medico con este término</p>
+                  </div>
+               </div>
+            </div>
+            <div *ngIf="results.medicos.length > 0" class="table-responsive">
+               <table class="table">
+                  <thead>
+                  <tr>
+                     <th>Foto</th>
+                     <th>Nombre</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <tr *ngFor="let medico of results.medicos">
+                     <td class="w50">
+                           <span class="round">
+                              <img [src]="medico.img | getImage:'medicos'" class="img-fluid">
+                           </span>
+                     </td>
+                     <td><a [routerLink]="['/dashboard/doctor/', medico.uid]">{{medico.name}}</a></td>
+                  </tr>
+                  </tbody>
+               </table>
+            </div>
+         </div>
+      </div>
+   </div>
+
+</div>

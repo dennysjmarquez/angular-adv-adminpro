@@ -5,6 +5,7 @@ import {FileUploadService} from '../../services/file-upload.service';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import Swal from 'sweetalert2';
 import {ModalChangeImageService} from '../../components/modal-change-image/services/modal-change-image.service';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
    selector: 'app-profile-page',
@@ -20,7 +21,7 @@ import {ModalChangeImageService} from '../../components/modal-change-image/servi
 export class ProfilePageComponent implements OnInit {
    private formSubmitted = false;
 
-   user: UserModel = this._userService.user;
+   user: UserModel = this._authService.currentUser;
 
    @ViewChild('avatarFile') avatarFile;
 
@@ -29,10 +30,10 @@ export class ProfilePageComponent implements OnInit {
       email: [this.user.email, [Validators.required, Validators.email]],
    });
 
-   previImagenUser: string = this._userService.user.getImagen;
    imagenUserUpLoad: File;
 
    constructor(
+      private _authService: AuthService,
       private _userService: UserService,
       private _formBuilder: FormBuilder,
       private _fileUploadService: FileUploadService,
@@ -48,19 +49,11 @@ export class ProfilePageComponent implements OnInit {
    }
 
    handleFileInput(file: File) {
-      if (!file) {
-         this.previImagenUser = this._userService.user.getImagen;
-         this.imagenUserUpLoad = null;
-         return;
-      }
-
       const reader = new FileReader();
 
       this.imagenUserUpLoad = file;
       reader.readAsDataURL(file);
-      reader.onload = (event: any) => {
-         this.previImagenUser = event.target.result;
-      };
+      reader.onload = (event: any) => {};
    }
 
    clickFile() {
@@ -77,7 +70,7 @@ export class ProfilePageComponent implements OnInit {
 
          .subscribe(
             ({nameFile}) => {
-               this.user.img = nameFile;
+               this._authService.currentUser.img = nameFile;
 
                Swal.fire({
                   title: 'Atención!',

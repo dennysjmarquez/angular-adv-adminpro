@@ -31,11 +31,11 @@
    </div>
 </div>
 
-<div class="row">
+<div class="row" >
 
    <div class="col-12">
 
-      <div class="text-center mt-3">
+      <div class="text-center mt-3" *ngIf="currentUser.role === ROLE_ADMIN">
          <button [routerLink]="['/dashboard/doctor/new']" class="btn btn-primary">Crear medico</button>
       </div>
 
@@ -74,7 +74,7 @@
                      <tr>
                         <th>Foto</th>
                         <th>Nambre</th>
-                        <th *ngIf="userService.user.role === ROLE_ADMIN" class="text-nowrap">Acciones</th>
+                        <th *ngIf="currentUser.role === ROLE_ADMIN" class="text-nowrap">Acciones</th>
                      </tr>
                      </thead>
                      <tbody>
@@ -82,14 +82,15 @@
 
                      <tr *ngFor="let medico of medicos;">
 
-                        <td (click)="openImageModal(medico)" class="w50 cursor-pointer">
+                        <td (click)="openImageModal(medico)" class="w50"
+                            [ngClass]="{'cursor-pointer': currentUser.role === ROLE_ADMIN }">
                            <span class="round">
                               <img [src]="medico.img | getImage:'medicos'" class="img-fluid">
                            </span>
                         </td>
 
                         <td>{{medico.name}}</td>
-                        <td *ngIf="userService.user.role === ROLE_ADMIN" class="text-nowrap w100 text-center">
+                        <td *ngIf="currentUser.role === ROLE_ADMIN" class="text-nowrap w100 text-center">
                            <a [routerLink]="['/dashboard/doctor', medico.uid ]" class="cursor-pointer "
                               data-original-title="Editar"
                               data-toggle="tooltip" style="margin-right: 20px; color: #000"> <i

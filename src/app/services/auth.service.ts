@@ -8,7 +8,6 @@ import { Router } from '@angular/router';
 import { environment } from '@env';
 import { LoginForm } from '../interfaces/login-form.interface';
 
-
 declare const gapi: any;
 
 @Injectable({
@@ -17,7 +16,7 @@ declare const gapi: any;
 export class AuthService {
 	baseURL = environment.baseUrl;
 
-	currentUser: UserModel;
+	public currentUser: UserModel;
 
 	constructor(private http: HttpClient, private _router: Router, private _ngZone: NgZone) {}
 
@@ -90,7 +89,8 @@ export class AuthService {
 			return this.http.post(`${this.baseURL}/login/google`, gToken).pipe(
 				tap(({ token = '' }: any) => {
 					localStorage.setItem('token', token);
-				})
+				}),
+				tap((data: any) => this.setCurrentUser(data))
 			);
 		},
 
@@ -102,6 +102,7 @@ export class AuthService {
 		 */
 		logOut: (callback?: Function) => {
 			const logOut = () => {
+				this.resetCurrentUser();
 				const auth2 = this.google.startApp['gapiAuth2'].getAuthInstance();
 
 				auth2.signOut().then(() => {
@@ -155,10 +156,7 @@ export class AuthService {
 					// Almacena el nuevo token
 					localStorage.setItem('token', token);
 				}),
-				tap(({ usuario }: any) => {
-					const { name, email, img, google, role, uid } = usuario;
-					this.currentUser = new UserModel(name, email, '', img, google, role, uid);
-				})
+				tap((data: any) => this.setCurrentUser(data))
 			);
 	}
 
@@ -166,7 +164,16 @@ export class AuthService {
 		return this.http.post(`${this.baseURL}/login`, formData).pipe(
 			tap(({ token = '' }: any) => {
 				localStorage.setItem('token', token);
-			})
+			}),
+			tap((data: any) => this.setCurrentUser(data))
 		);
+	}
+
+	private resetCurrentUser() {
+		this.currentUser = new UserModel(null, null, null, null, null, null, null);
+	}
+
+	private setCurrentUser({ usuario: { name, email, img, google, role, uid } }) {
+		this.currentUser = new UserModel(name, email, '', img, google, role, uid);
 	}
 }

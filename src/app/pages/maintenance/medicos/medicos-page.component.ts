@@ -1,13 +1,13 @@
-import {Component, OnInit, OnDestroy, ViewChild} from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MedicosService } from './services/medicos.service';
-import { UserService } from '../users/services/user.service';
 import { ModalChangeImageService } from '../../../components/modal-change-image/services/modal-change-image.service';
 import { MedicosModel } from '../../../models/medicos.model';
 import { environment } from '@env';
-import {RemoveAllTooltipsFloatService} from '../../../helpers/remove-all-tooltips-float.service';
-import {PaginationComponent} from '../../../components/shared/pagination/pagination.component';
-import {HospitalsModel} from '../../../models/hospitals.model';
+import { RemoveAllTooltipsFloatService } from '../../../helpers/remove-all-tooltips-float.service';
+import { PaginationComponent } from '../../../components/shared/pagination/pagination.component';
 import Swal from 'sweetalert2';
+import { UserModel } from '../../../models/user.model';
+import { AuthService } from '../../../services/auth.service';
 
 declare var $;
 
@@ -17,8 +17,8 @@ declare var $;
 	styles: [],
 })
 export class MedicosPageComponent implements OnInit, OnDestroy {
-   @ViewChild('elemSearch') elemSearch;
-   @ViewChild('paginationRef') paginationRef: PaginationComponent;
+	@ViewChild('elemSearch') elemSearch;
+	@ViewChild('paginationRef') paginationRef: PaginationComponent;
 
 	public records: number = 0;
 	public offset: number = 0;
@@ -34,9 +34,13 @@ export class MedicosPageComponent implements OnInit, OnDestroy {
 
 	constructor(
 		private _medicosService: MedicosService,
-		private _userService: UserService,
+		private _authService: AuthService,
 		private _modalChangeImageService: ModalChangeImageService
 	) {}
+
+	get currentUser(): UserModel {
+		return this._authService.currentUser;
+	}
 
 	ngOnInit(): void {
 		this.getMedicos();
@@ -44,10 +48,6 @@ export class MedicosPageComponent implements OnInit, OnDestroy {
 		$('body').tooltip({
 			selector: '[data-toggle="tooltip"]',
 		});
-	}
-
-	get userService() {
-		return this._userService;
 	}
 
 	getMedicos() {
@@ -74,109 +74,112 @@ export class MedicosPageComponent implements OnInit, OnDestroy {
 		});
 	}
 
-   /**
-    *
-    * Busca un medico por su nombre
-    *
-    * @param value {string}
-    */
-   search(value?: string) {
-      clearTimeout(this.search['wait']);
+	/**
+	 *
+	 * Busca un medico por su nombre
+	 *
+	 * @param value {string}
+	 */
+	search(value?: string) {
+		clearTimeout(this.search['wait']);
 
-      if (value) {
-         this.offset = 0;
+		if (value) {
+			this.offset = 0;
 
-         // Se almacena el valor de la Query para la paginación
-         this.searchValue = value;
-      }
+			// Se almacena el valor de la Query para la paginación
+			this.searchValue = value;
+		}
 
-      // Si la búsqueda está vacía se retornan todos los hospitales
-      if (typeof value === 'string' && value.length === 0) {
-         this.clearSearchValue();
-         return;
-      }
+		// Si la búsqueda está vacía se retornan todos los hospitales
+		if (typeof value === 'string' && value.length === 0) {
+			this.clearSearchValue();
+			return;
+		}
 
-      // Dalay para esperar la última palabra, para ahorrar estar mandando
-      // letra por letra mientras se escribe en la caja de texto
-      this.search['wait'] = setTimeout(() => {
-         // Muestra el loading
-         this.loading = !this.loading;
+		// Dalay para esperar la última palabra, para ahorrar estar mandando
+		// letra por letra mientras se escribe en la caja de texto
+		this.search['wait'] = setTimeout(() => {
+			// Muestra el loading
+			this.loading = !this.loading;
 
-         this._medicosService.searchMedicos(this.searchValue, this.offset).subscribe(
-            ({ medicos, records, limit }: any) => {
-               this.medicos = medicos;
+			this._medicosService.searchMedicos(this.searchValue, this.offset).subscribe(
+				({ medicos, records, limit }: any) => {
+					this.medicos = medicos;
 
-               this.records = records;
-               this.limit = limit;
+					this.records = records;
+					this.limit = limit;
 
-               // Oculta el loading
-               this.loading = !this.loading;
-            },
-            (error) => {
-               console.log(error);
-            }
-         );
-      }, 700);
-   }
+					// Oculta el loading
+					this.loading = !this.loading;
+				},
+				(error) => {
+					console.log(error);
+				}
+			);
+		}, 700);
+	}
 
-   /**
-    *
-    * Borra la búsqueda
-    *
-    */
-   clearSearchValue() {
-      RemoveAllTooltipsFloatService.remove();
-      this.offset = 0;
-      this.searchValue = '';
-      this.elemSearch.nativeElement.value = '';
-      this.getMedicos();
-   }
+	/**
+	 *
+	 * Borra la búsqueda
+	 *
+	 */
+	clearSearchValue() {
+		RemoveAllTooltipsFloatService.remove();
+		this.offset = 0;
+		this.searchValue = '';
+		this.elemSearch.nativeElement.value = '';
+		this.getMedicos();
+	}
 
-   setOffset(offset: number) {
-      this.offset = offset;
+	setOffset(offset: number) {
+		this.offset = offset;
 
-      this.searchValue ? this.search() : this.getMedicos();
-   }
+		this.searchValue ? this.search() : this.getMedicos();
+	}
 
-   onModalImgChangeClose() {
-      this.openModalImg = false;
-   }
+	onModalImgChangeClose() {
+		this.openModalImg = false;
+	}
 
-   openImageModal(medico: MedicosModel) {
-      this.ref_Model_ModalImg = medico;
-      this.openModalImg = true;
-   }
+	openImageModal(medico: MedicosModel) {
+		if (this.currentUser.role !== this.ROLE_ADMIN) {
+			return;
+		}
 
-   deleteMedico(medico: MedicosModel) {
-      Swal.fire({
-         title: '¿Borrar medico?',
-         text: `Está seguro de borrar al medico: ${medico.name}`,
-         icon: 'question',
-         showCancelButton: true,
-         confirmButtonColor: '#3085d6',
-         confirmButtonText: 'Si, Borrar',
-      }).then(({ isConfirmed }) => {
-         if (isConfirmed) {
-            this._medicosService.deleteMedico(medico.uid).subscribe(
-               () => {
-                  Swal.fire('Eliminado!', 'El medico ha sido eliminado.', 'success');
-                  this.paginationRef.deleteItem(this.medicos.length);
-               },
-               (error) => {
-                  Swal.fire({
-                     title: 'Error!',
-                     text: error.error.msg,
-                     icon: 'error',
-                     confirmButtonText: 'Ok',
-                  });
-               }
-            );
-         }
-      });
-   }
+		this.ref_Model_ModalImg = medico;
+		this.openModalImg = true;
+	}
 
-   ngOnDestroy(): void {
-      RemoveAllTooltipsFloatService.remove();
-   }
+	deleteMedico(medico: MedicosModel) {
+		Swal.fire({
+			title: '¿Borrar medico?',
+			text: `Está seguro de borrar al medico: ${medico.name}`,
+			icon: 'question',
+			showCancelButton: true,
+			confirmButtonColor: '#3085d6',
+			confirmButtonText: 'Si, Borrar',
+		}).then(({ isConfirmed }) => {
+			if (isConfirmed) {
+				this._medicosService.deleteMedico(medico.uid).subscribe(
+					() => {
+						Swal.fire('Eliminado!', 'El medico ha sido eliminado.', 'success');
+						this.paginationRef.deleteItem(this.medicos.length);
+					},
+					(error) => {
+						Swal.fire({
+							title: 'Error!',
+							text: error.error.msg,
+							icon: 'error',
+							confirmButtonText: 'Ok',
+						});
+					}
+				);
+			}
+		});
+	}
 
+	ngOnDestroy(): void {
+		RemoveAllTooltipsFloatService.remove();
+	}
 }

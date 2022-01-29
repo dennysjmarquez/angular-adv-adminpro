@@ -73,7 +73,7 @@
                         <th>Email</th>
                         <th>Role</th>
                         <th>Auth</th>
-                        <th *ngIf="userService.user.role === ROLE_ADMIN" class="text-nowrap">Acciones</th>
+                        <th *ngIf="currentUser.role === ROLE_ADMIN" class="text-nowrap">Acciones</th>
                      </tr>
                      </thead>
                      <tbody>
@@ -93,8 +93,8 @@
 
                            <ng-container
                               *ngIf="
-                              user.uid !== userService.user.uid &&
-                              userService.user.role === ROLE_ADMIN"
+                              user.uid !== currentUser.uid &&
+                              currentUser.role === ROLE_ADMIN"
                            >
 
                               <select (change)="changeUserRole(user)"
@@ -107,7 +107,7 @@
 
                            </ng-container>
 
-                           <ng-container *ngIf="user.uid === userService.user.uid">
+                           <ng-container *ngIf="user.uid === currentUser.uid">
                               {{user.role}}
                            </ng-container>
 
@@ -118,8 +118,8 @@
                            <span *ngIf="!user.google" class="label label-info">Normal</span>
 
                         </td>
-                        <td *ngIf="userService.user.role === ROLE_ADMIN" class="text-nowrap w100 text-center">
-                           <a (click)="deleteUser(user)" *ngIf="user.uid !== userService.user.uid"
+                        <td *ngIf="currentUser.role === ROLE_ADMIN" class="text-nowrap w100 text-center">
+                           <a (click)="deleteUser(user)" *ngIf="user.uid !== currentUser.uid"
                               class="cursor-pointer" data-original-title="Borrar"
                               data-toggle="tooltip"> <i
                               class="fa fa-close text-danger"></i> </a>

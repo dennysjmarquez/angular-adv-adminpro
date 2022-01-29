@@ -54,7 +54,7 @@
 
             <div class="form-group">
 
-               <img [src]="previImagenUser" class="img-fluid d-block mb-3">
+               <img [src]="user.img | getImage:'users'" class="img-fluid d-block mb-3">
                <input type="file" #avatarFile (change)="handleFileInput($event.target.files[0])" hidden>
 
             </div>

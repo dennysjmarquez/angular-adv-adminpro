@@ -19,7 +19,6 @@ import {RemoveAllTooltipsFloatService} from '../../../../helpers/remove-all-tool
 })
 export class MedicoPageComponent implements OnInit, OnDestroy {
 	public medicoForm: FormGroup;
-	public loading: boolean = false;
 	public hospitals: HospitalsModel[] = [];
 	public hospitalSelect: any;
 	public medicoSelect: MedicosModel;
@@ -81,9 +80,6 @@ export class MedicoPageComponent implements OnInit, OnDestroy {
 	}
 
 	getHospitals() {
-		// Muestra el loading
-		this.loading = true;
-
 		return new Promise((resolve, reject) => {
 			this._hospitalsService.getHospitals(null).subscribe(
 				({ hospitals }: any) => {
@@ -93,10 +89,6 @@ export class MedicoPageComponent implements OnInit, OnDestroy {
 				(error) => {
 					console.log(error);
 					reject(error);
-				},
-				() => {
-					// Oculta el loading
-					this.loading = false;
 				}
 			);
 		});

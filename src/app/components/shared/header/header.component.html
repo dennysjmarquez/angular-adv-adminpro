@@ -47,8 +47,8 @@
                 <li class="nav-item hidden-xs-down search-box"><a
                     class="nav-link hidden-sm-down waves-effect waves-dark" href="javascript:void(0)"><i
                     class="ti-search"></i></a>
-                    <form class="app-search">
-                        <input type="text" class="form-control" placeholder="Search & enter"> <a class="srh-btn"><i
+                    <form class="app-search" (ngSubmit)="onSearch(search.value)">
+                        <input #search type="text" class="form-control" placeholder="Buscar medico, hospital o usuario"> <a class="srh-btn"><i
                         class="ti-close"></i></a></form>
                 </li>
                 <!-- ============================================================== -->
@@ -189,13 +189,13 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle waves-effect waves-dark" href="" data-toggle="dropdown"
                        aria-haspopup="true" aria-expanded="false">
-                        <img [src]="user.getImagen" alt="user" class="profile-pic"/>
+                        <img [src]="user.img | getImage:'users'" alt="user" class="profile-pic"/>
                     </a>
                     <div class="dropdown-menu dropdown-menu-right fast fadeIn">
                         <ul class="dropdown-user">
                             <li>
                                 <div class="dw-user-box">
-                                    <div class="u-img"><img [src]="user.getImagen" alt="user"></div>
+                                    <div class="u-img"><img [src]="user.img | getImage:'users'" alt="user"></div>
                                     <div class="u-text">
                                         <h4>{{user.name}}</h4>
                                         <p class="text-muted">{{user.email}}</p>

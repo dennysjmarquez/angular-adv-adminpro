@@ -53,7 +53,6 @@ export class HospitalsService {
 	 */
 	searchHospitals(search: String, offset: number) {
 		return this._searchService.searchs(
-			this._authService.token,
 			`${this.baseURL}/search/hospital?q=${encodeURIComponent(String(search))}&offset=${offset}`
 		);
 	}

@@ -31,11 +31,11 @@
    </div>
 </div>
 
-<div class="row">
+<div class="row" >
 
    <div class="col-12">
 
-      <div class="text-center mt-3">
+      <div class="text-center mt-3" *ngIf="currentUser.role === ROLE_ADMIN">
          <button (click)="createHospital()" class="btn btn-primary">Crear hospital</button>
       </div>
 
@@ -74,22 +74,25 @@
                      <tr>
                         <th>Foto</th>
                         <th>Nambre</th>
-                        <th *ngIf="userService.user.role === ROLE_ADMIN" class="text-nowrap">Acciones</th>
+                        <th *ngIf="currentUser.role === ROLE_ADMIN" class="text-nowrap">Acciones</th>
                      </tr>
                      </thead>
                      <tbody>
 
                      <tr *ngFor="let hospital of hospitals;">
 
-                        <td (click)="openImageModal(hospital)" class="w50 cursor-pointer">
+                        <td (click)="openImageModal(hospital)" class="w50"
+                            [ngClass]="{'cursor-pointer': currentUser.role === ROLE_ADMIN }">
                            <img [alt]="hospital.name" [src]="hospital.img | getImage:'hospitals'" class="img-fluid">
                         </td>
 
                         <td>
-                           <input [(ngModel)]="hospital.name" class="form-control" placeholder="Clic para editar "
+                           <input *ngIf="currentUser.role === ROLE_ADMIN" [(ngModel)]="hospital.name"
+                                  class="form-control" placeholder="Clic para editar "
                                   type="text">
+                           {{currentUser.role !== ROLE_ADMIN ? hospital.name : ''}}
                         </td>
-                        <td *ngIf="userService.user.role === ROLE_ADMIN" class="text-nowrap w100 text-center">
+                        <td *ngIf="currentUser.role === ROLE_ADMIN" class="text-nowrap w100 text-center">
                            <a (click)="updateHospital(hospital)" class="cursor-pointer" data-original-title="Guardar"
                               data-toggle="tooltip" style="margin-right: 20px"> <i
                               class="fa fa-floppy-o"></i> </a>

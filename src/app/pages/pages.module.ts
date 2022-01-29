@@ -22,6 +22,7 @@ import { MedicosPageComponent } from './maintenance/medicos/medicos-page.compone
 import { LoadingComponent } from './maintenance/components/loading/loading.component';
 import { PipesModule } from '../pipes/pipes.module';
 import { MedicoPageComponent } from './maintenance/medicos/medico/medico-page.component';
+import { SearchesComponent } from './searches/searches.component';
 
 @NgModule({
 	declarations: [
@@ -38,6 +39,7 @@ import { MedicoPageComponent } from './maintenance/medicos/medico/medico-page.co
 		MedicosPageComponent,
 		LoadingComponent,
 		MedicoPageComponent,
+		SearchesComponent,
 	],
 	imports: [
 		// RouterModule lo importamos porque se necesita las rutas  <router-outlet></router-outlet>

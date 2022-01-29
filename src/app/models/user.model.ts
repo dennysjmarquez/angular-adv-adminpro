@@ -13,7 +13,4 @@ export class UserModel {
 		public uid?: string
 	) {}
 
-	get getImagen() {
-		return this.img && this.img.includes('://') ? this.img : `${baseUrl}/upload/users/${this.img || 'no-imagen'}`;
-	}
 }

@@ -3,7 +3,6 @@ import { UserModel } from '../../../models/user.model';
 import { environment } from '@env';
 
 // Services
-
 import { UserService } from './services/user.service';
 import { RemoveAllTooltipsFloatService } from '../../../helpers/remove-all-tooltips-float.service';
 import { ModalChangeImageService } from '../../../components/modal-change-image/services/modal-change-image.service';
@@ -12,8 +11,7 @@ import { ModalChangeImageService } from '../../../components/modal-change-image/
 import Swal from 'sweetalert2';
 
 import { PaginationComponent } from '../../../components/shared/pagination/pagination.component';
-import { LoadingComponent } from '../components/loading/loading.component';
-import {HospitalsModel} from '../../../models/hospitals.model';
+import { AuthService } from '../../../services/auth.service';
 
 declare var $;
 
@@ -35,10 +33,22 @@ export class UsersPageComponent implements OnInit, OnDestroy {
 	public searchValue: string = '';
 	public ROLE_ADMIN: string = environment.ROLE_ADMIN;
 
-   public openModalImg: boolean = false;
-   public ref_Model_ModalImg: any;
+	public openModalImg: boolean = false;
+	public ref_Model_ModalImg: any;
 
-	constructor(private _userService: UserService, private _modalChangeImageService: ModalChangeImageService) {}
+	constructor(
+		private _authService: AuthService,
+		private _userService: UserService,
+		private _modalChangeImageService: ModalChangeImageService
+	) {}
+
+	get currentUser(): UserModel {
+		return this._authService.currentUser;
+	}
+
+	get hiddenModal() {
+		return this._modalChangeImageService.hiddenModal;
+	}
 
 	ngOnInit(): void {
 		this.getUsers();
@@ -49,17 +59,13 @@ export class UsersPageComponent implements OnInit, OnDestroy {
 	}
 
 	ngOnDestroy(): void {
-      RemoveAllTooltipsFloatService.remove();
+		RemoveAllTooltipsFloatService.remove();
 	}
 
-	get userService() {
-		return this._userService;
+	openImageModal(user: UserModel) {
+		this.ref_Model_ModalImg = user;
+		this.openModalImg = true;
 	}
-
-   openImageModal(user: UserModel) {
-      this.ref_Model_ModalImg = user;
-      this.openModalImg = true;
-   }
 
 	/**
 	 *
@@ -136,7 +142,7 @@ export class UsersPageComponent implements OnInit, OnDestroy {
 	 *
 	 */
 	clearSearchValue() {
-      RemoveAllTooltipsFloatService.remove()
+		RemoveAllTooltipsFloatService.remove();
 		this.offset = 0;
 		this.searchValue = '';
 		this.elemSearch.nativeElement.value = '';
@@ -193,14 +199,7 @@ export class UsersPageComponent implements OnInit, OnDestroy {
 		this.searchValue ? this.search() : this.getUsers();
 	}
 
-   get hiddenModal() {
-
-      return this._modalChangeImageService.hiddenModal;
-
-   }
-
-   onModalImgChangeClose() {
-      this.openModalImg = false;
-   }
-
+	onModalImgChangeClose() {
+		this.openModalImg = false;
+	}
 }
