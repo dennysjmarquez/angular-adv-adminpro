@@ -37,7 +37,7 @@ export class BreadcrumbsComponent implements OnDestroy {
 			)
 			.subscribe((data) => {
 				this.Title = data.title || 'AdminPro';
-				document.title = `AdminPro - ${this.Title}`;
+				document.title = `AdminPro - System Hospitals | ${this.Title}`;
 			});
 	}
 
