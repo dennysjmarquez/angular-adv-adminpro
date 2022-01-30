@@ -46,14 +46,12 @@ export class GoogleAuthService {
 
 
         }).catch(error => {
-
             Swal.fire({
-                title: options.errors.title || 'Error!',
-                text: options.errors.text || error.error.msg,
-                icon: options.errors.icon || 'error',
-                confirmButtonText: options.errors.confirmButtonText || 'Ok'
+                title: options?.errors?.title || 'Error!',
+                text: options?.errors?.text || error?.error?.msg || 'Error desconocido',
+                icon: options?.errors?.icon || 'error',
+                confirmButtonText: options?.errors?.confirmButtonText || 'Ok'
             });
-
         });
 
     }

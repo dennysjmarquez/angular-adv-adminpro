@@ -1,11 +1,13 @@
-import { Component, OnInit, AfterViewInit, NgZone } from '@angular/core';
+import { AfterViewInit, Component, NgZone, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, Validators } from '@angular/forms';
 import Swal from 'sweetalert2';
 import { AuthService } from '../../../services/auth.service';
 import { GoogleAuthService } from '../../../services/google-auth.service';
+import {finalize} from 'rxjs/operators';
 
 declare function customScriptINI();
+declare var $: any;
 
 @Component({
 	selector: 'app-login',
@@ -27,7 +29,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
 
 	constructor(
 		private _router: Router,
-      private _authService: AuthService,
+		private _authService: AuthService,
 		private fb: FormBuilder,
 		private ngZone: NgZone,
 		private googleLoginService: GoogleAuthService
@@ -71,8 +73,10 @@ export class LoginComponent implements OnInit, AfterViewInit {
 		if (this.loginFrom.invalid) {
 			return;
 		}
-
-		this._authService.loginUser(this.loginFrom.value).subscribe(
+		$('.preloader').fadeIn();
+		this._authService.loginUser(this.loginFrom.value).pipe(finalize(()=>{
+         $(".preloader").fadeOut();
+      })).subscribe(
 			(resp) => {
 				if (this.loginFrom.value.remember) {
 					localStorage.setItem('email', this.loginFrom.value.email);
@@ -83,13 +87,16 @@ export class LoginComponent implements OnInit, AfterViewInit {
 				this.redirect();
 			},
 			(error) => {
-				Swal.fire({
-					title: 'Error!',
-					text: error.error.msg,
-					icon: 'error',
-					confirmButtonText: 'Ok',
-				});
+
+            Swal.fire({
+               title: 'Error!',
+               text:error?.error?.msg || 'Error desconocido',
+               icon: 'error',
+               confirmButtonText: 'Ok'
+            });
+
 			}
-		);
+		)
+
 	}
 }

@@ -8,13 +8,15 @@ import { Router } from '@angular/router';
 import { environment } from '@env';
 import { LoginForm } from '../interfaces/login-form.interface';
 
-declare const gapi: any;
+declare var gapi: any;
+declare var $: any;
 
 @Injectable({
 	providedIn: 'root',
 })
 export class AuthService {
 	baseURL = environment.baseUrl;
+   google_id = environment.GOOGLE_ID
 
 	public currentUser: UserModel;
 
@@ -33,7 +35,7 @@ export class AuthService {
 
 					// Retrieve the singleton for the GoogleAuth library and set up the client.
 					const auth2Init = gapi.auth2.init({
-						client_id: '922862110418-h5ppkfgv8e48qv8igcp6vo8dpio0tjcs.apps.googleusercontent.com',
+						client_id: this.google_id,
 						cookiepolicy: 'single_host_origin',
 						// Request scopes in addition to 'profile' and 'email'
 						//scope: 'additional_scope'
@@ -63,12 +65,13 @@ export class AuthService {
 					(googleUser) => {
 						const profile = googleUser.getBasicProfile();
 						const token = googleUser.getAuthResponse().id_token;
-
+                  $(".preloader").fadeIn();
 						this.google.login({ token }).subscribe(
 							(resp) => {
 								resolve(profile);
 							},
 							(error) => {
+                        $(".preloader").fadeOut();
 								reject(error);
 							}
 						);
