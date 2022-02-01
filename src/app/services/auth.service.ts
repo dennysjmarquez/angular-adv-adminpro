@@ -89,6 +89,9 @@ export class AuthService {
 		 * @param gToken {string} Token devuelto por Google
 		 */
 		login: (gToken: LoginGoogleData) => {
+
+         this.resetCurrentUser();
+
 			return this.http.post(`${this.baseURL}/login/google`, gToken).pipe(
 				tap(({ token = '' }: any) => {
 					localStorage.setItem('token', token);
@@ -109,8 +112,6 @@ export class AuthService {
 				const auth2 = this.google.startApp['gapiAuth2'].getAuthInstance();
 
 				auth2.signOut().then(() => {
-					localStorage.removeItem('token');
-
 					typeof callback === 'function' && this._ngZone.run(() => callback());
 				});
 			};
@@ -164,6 +165,9 @@ export class AuthService {
 	}
 
 	loginUser(formData: LoginForm): Observable<any> {
+
+      this.resetCurrentUser();
+
 		return this.http.post(`${this.baseURL}/login`, formData).pipe(
 			tap(({ token = '' }: any) => {
 				localStorage.setItem('token', token);
@@ -172,8 +176,9 @@ export class AuthService {
 		);
 	}
 
-	private resetCurrentUser() {
+	resetCurrentUser() {
 		this.currentUser = new UserModel(null, null, null, null, null, null, null);
+      localStorage.removeItem('token');
 	}
 
 	private setCurrentUser({ usuario: { name, email, img, google, role, uid } }) {

@@ -35,10 +35,13 @@ export class UserService {
 	}
 
 	createUser(formData: RegisterForm) {
+
+      this._authService.resetCurrentUser()
+
 		return this.http.post(`${this.baseURL}/users`, formData).pipe(
-			tap(({ token = '' }: any) => {
-				localStorage.setItem('token', token);
-			})
+         tap(({ token = '' }: any) => {
+            localStorage.setItem('token', token);
+         }),
 		);
 	}
 

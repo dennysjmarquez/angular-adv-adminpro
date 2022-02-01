@@ -1,138 +1,111 @@
-import {Component, NgZone, OnInit, AfterViewInit} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {Router} from '@angular/router';
+import { AfterViewInit, Component, NgZone, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
-import {UserService} from '../../maintenance/users/services/user.service';
-import {GoogleAuthService} from '../../../services/google-auth.service';
+import { UserService } from '../../maintenance/users/services/user.service';
+import { GoogleAuthService } from '../../../services/google-auth.service';
 
 declare function customScriptINI();
 
 @Component({
-    selector: 'app-register',
-    templateUrl: './register.component.html',
-    styles: [
-        `
-            @import "./assets/css/pages/login-register-lock.css";
-
-        `]
+	selector: 'app-register',
+	templateUrl: './register.component.html',
+	styles: [
+		`
+			@import './assets/css/pages/login-register-lock.css';
+		`,
+	],
 })
 export class RegisterComponent implements OnInit, AfterViewInit {
+	public formSubmitted = false;
 
-    public formSubmitted = false;
+	public registerFrom = this.fb.group(
+		{
+			name: ['', [Validators.required, Validators.minLength(3)]],
+			email: ['', [Validators.required, Validators.email]],
+			password: ['', Validators.required],
+			password2: ['', Validators.required],
+			terms: [false, Validators.required],
+		},
+		{
+			validators: [this.equalFields('password', 'password2', 'passWordNotequal')],
+		}
+	);
 
-    public registerFrom = this.fb.group({
-        name: ['', [Validators.required, Validators.minLength(3)]],
-        email: ['', [Validators.required, Validators.email]],
-        password: ['', Validators.required],
-        password2: ['', Validators.required],
-        terms: [false, Validators.required]
-    }, {
-        validators: [
-            this.equalFields('password', 'password2', 'passWordNotequal')
-        ]
-    });
+	constructor(
+		private fb: FormBuilder,
+		private userService: UserService,
+		private _router: Router,
+		private ngZone: NgZone,
+		private googleLoginService: GoogleAuthService
+	) {}
 
-    constructor(
-        private fb: FormBuilder,
-        private userService: UserService,
-        private _router: Router,
-        private ngZone: NgZone,
-        private googleLoginService: GoogleAuthService
-    ) {
-    }
+	ngOnInit(): void {
+		customScriptINI();
+	}
 
-    ngOnInit(): void {
+	ngAfterViewInit(): void {
+		this.googleLoginService.makertGoogleLoginBtn({
+			btnSignin: 'goole-signin',
 
-        customScriptINI();
+			callbackStartApp: (profile) => {
+				// Redirige
+				this.ngZone.run(() => this.redirect());
+			},
+		});
+	}
 
-    }
+	fieldNotValid(field: string, error: string): Boolean {
+		return (
+			this.formSubmitted &&
+			(error === 'checkbox' ? !this.registerFrom.get(field).value : this.registerFrom.get(field).getError(error))
+		);
+	}
 
-    ngAfterViewInit(): void {
+	fromNotValid(error: string) {
+		return this.registerFrom.getError(error);
+	}
 
-        this.googleLoginService.makertGoogleLoginBtn({
+	equalFields(FieldName1: string, FieldName2: string, name: string) {
+		return (formGroup: FormGroup) => {
+			const FieldName1Value = formGroup.get(FieldName1).value;
+			const FieldName2Value = formGroup.get(FieldName2).value;
 
-            btnSignin: 'goole-signin',
+			if (!this.formSubmitted || FieldName1Value === FieldName2Value) {
+				return null;
+			}
 
-            callbackStartApp: (profile) => {
+			const error = {};
+			error[name] = true;
 
-                // Redirige
-                this.ngZone.run(() => this.redirect());
+			return error;
+		};
+	}
 
-            }
-        });
+	redirect() {
+		this._router.navigateByUrl('/');
+	}
 
-    }
+	onSubmit() {
+		this.formSubmitted = true;
 
-    fieldNotValid(field: string, error: string): Boolean {
+		if (this.registerFrom.invalid) {
+			return;
+		}
 
-        return this.formSubmitted && (
-            error === 'checkbox'
-                ? !this.registerFrom.get(field).value
-                : this.registerFrom.get(field).getError(error)
-        );
-
-    }
-
-    fromNotValid(error: string) {
-
-        return this.registerFrom.getError(error);
-
-    }
-
-    equalFields(FieldName1: string, FieldName2: string, name: string) {
-
-        return (formGroup: FormGroup) => {
-
-            const FieldName1Value = formGroup.get(FieldName1).value;
-            const FieldName2Value = formGroup.get(FieldName2).value;
-
-            if (!this.formSubmitted || FieldName1Value === FieldName2Value) {
-                return null;
-            }
-
-            const error = {};
-
-            error[name] = true;
-
-            return error;
-
-
-        };
-
-    }
-
-    redirect() {
-
-        this._router.navigateByUrl('/');
-
-    }
-
-    onSubmit() {
-
-        this.formSubmitted = true;
-
-        if (this.registerFrom.invalid) {
-            return;
-        }
-
-        this.userService.createUser(this.registerFrom.value)
-            .subscribe(resp => {
-
-                localStorage.removeItem('email');
-                this._router.navigateByUrl('/');
-
-            }, error => {
-                //console.log(error.error.msg)
-
-                Swal.fire({
-                    title: 'Error!',
-                    text: error.error.msg,
-                    icon: 'error',
-                    confirmButtonText: 'Ok'
-                })
-
-            })
-
-    }
-
+		this.userService.createUser(this.registerFrom.value).subscribe(
+			(resp) => {
+				localStorage.removeItem('email');
+				this._router.navigateByUrl('/');
+			},
+			(error) => {
+				Swal.fire({
+					title: 'Error!',
+					text: error.error.msg,
+					icon: 'error',
+					confirmButtonText: 'Ok',
+				});
+			}
+		);
+	}
 }

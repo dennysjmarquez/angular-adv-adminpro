@@ -37,9 +37,15 @@ const APP_ROUTES: Routes = [
 	},
 	{ path: 'hospitals', component: HospitalsPageComponent, data: { title: 'Mantenimiento de Hospitales' } },
 	{ path: 'doctors', component: MedicosPageComponent, data: { title: 'Mantenimiento de Médicos' } },
-	{ path: 'doctor/new', component: MedicoPageComponent, data: { title: 'Mantenimiento de médico | Nuevo' } },
+	{
+		path: 'doctor/new',
+		canActivate: [RolGuard],
+		component: MedicoPageComponent,
+		data: { title: 'Mantenimiento de médico | Nuevo' },
+	},
 	{
 		path: 'doctor/:id',
+		//canActivate: [RolGuard],
 		component: MedicoPageComponent,
 		data: { title: 'Mantenimiento de Médico | Editar', edit: true },
 	},
