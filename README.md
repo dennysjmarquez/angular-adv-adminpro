@@ -1,6 +1,47 @@
-# Adminpro
+# Proyecto (angular-adv-adminpro)
+Angular 10, MEAN, Google auth, JWT, Lazyload, upload de archivos, Guards, Pipes, Zona admin, dashboard y mucho más.
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 10.0.5.
+<img src="https://miro.medium.com/max/1400/1*6HtFq392SoRkZOt_iOXz9A.png"/>
+
+Puede ver una **demo** alojada en **Heroku** [https://adminpro-system-hospitals.herokuapp.com/](https://adminpro-system-hospitals.herokuapp.com/)
+
+**Más información sobre este cliente lo encuentra aquí :**
+[https://dennysjmarquez.medium.com/angular-10-mean-google-auth-jwt-lazyload-upload-de-archivos-guards-pipes-zona-admin-bfa2e5ef9074](https://dennysjmarquez.medium.com/angular-10-mean-google-auth-jwt-lazyload-upload-de-archivos-guards-pipes-zona-admin-bfa2e5ef9074)
+
+# Sesión 1 — Front-End
+
+
+## Como hacerlo funcionar
+
+Instale las dependencias del proyecto:
+
+```bash
+npm install
+```
+
+Agregue las siguientes configuraciones en **environment.defaults.ts** archivo ubicado en:
+environments/
+
+```bash
+export const defaultEnvironment = {
+   ROLE_ADMIN: 'ADMIN_ROLE',
+   GOOGLE_ID: ''
+};
+```
+
+**GOOGLE_ID** Es el ID generado en la App OAuth2 de Google, puedes conseguir uno aquí
+Es el ID generado en la App OAuth2 de Google, puedes conseguir uno aquí
+[https://console.cloud.google.com/apis/credentials](https://console.cloud.google.com/apis/credentials)
+
+**El servidor que retorna la data para este proyecto lo puedes encontrar aquí**
+[https://github.com/dennysjmarquez/angular-adv-adminpro-backend](https://github.com/dennysjmarquez/angular-adv-adminpro-backend)
+
+Compilas para producción este proyecto y lo agregas en la carpeta **public** del servidor, pero si solo necesitas que te sirva la data no es necesario que hagas esto, solo echa andar el servidor con su debida configuración.
+
+<br/>
+
+**Ya con las configuraciones listas:**
+
 
 ## Development server
 
