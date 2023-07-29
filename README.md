@@ -3,7 +3,7 @@ Angular 10, MEAN, Google auth, JWT, Lazyload, upload de archivos, Guards, Pipes,
 
 <img src="https://miro.medium.com/max/1400/1*6HtFq392SoRkZOt_iOXz9A.png"/>
 
-Puede ver una **demo** alojada en: [https://adminpro-system-hospitals.onrender.com/]([https://adminpro-system-hospitals.herokuapp.com/](https://adminpro-system-hospitals.onrender.com/))
+Puede ver una **demo** alojada en: [https://adminpro-system-hospitals.onrender.com/](https://adminpro-system-hospitals.onrender.com/)
 
 **Más información sobre este cliente lo encuentra aquí :**
 [https://dennysjmarquez.medium.com/angular-10-mean-google-auth-jwt-lazyload-upload-de-archivos-guards-pipes-zona-admin-bfa2e5ef9074](https://dennysjmarquez.medium.com/angular-10-mean-google-auth-jwt-lazyload-upload-de-archivos-guards-pipes-zona-admin-bfa2e5ef9074)
